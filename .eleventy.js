@@ -1,4 +1,5 @@
-export default function(eleventyConfig) {
+// .eleventy.js — version CommonJS
+module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({"src/assets": "assets"});
   eleventyConfig.addPassthroughCopy({"src/robots.txt": "robots.txt"});
   return {
@@ -6,4 +7,4 @@ export default function(eleventyConfig) {
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk"
   };
-}
+};
