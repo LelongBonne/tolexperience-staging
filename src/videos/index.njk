@@ -3,14 +3,44 @@ title: "Vidéos — TOLExperience (staging)"
 layout: "layouts/base.njk"
 ---
 <h1>Vidéos</h1>
-<div class="grid">
-{% for id in videos.ids %}
-  <div class="card">
-    <div style="aspect-ratio:16/9">
-      <iframe loading="lazy"
-        src="https://www.youtube-nocookie.com/embed/{{ id }}"
-        title="Vidéo" allowfullscreen style="width:100%;height:100%;border:0"></iframe>
-    </div>
-  </div>
-{% endfor %}
+<p>Intégration YouTube en mode « privacy enhanced ».</p>
+
+<div class="video-grid">
+  {% for id in videos.ids %}
+    {% set vid = id %}  {# ← pas de filtre, on utilise l’ID tel quel #}
+    {% if vid %}
+    <figure class="video-card">
+      <div class="video-frame">
+        <iframe
+          loading="lazy"
+          src="https://www.youtube-nocookie.com/embed/{{ vid }}"
+          title="Vidéo {{ loop.index }}"
+          allowfullscreen
+          style="width:100%;height:100%;border:0"></iframe>
+      </div>
+    </figure>
+    {% endif %}
+  {% endfor %}
 </div>
+
+<style>
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+  margin-top:12px;
+}
+.video-card{margin:0}
+.video-frame{
+  position:relative;
+  padding-top:56.25%; /* 16:9 */
+  background:#0f1113;
+  border:1px solid #222;
+  border-radius:8px;
+  overflow:hidden;
+}
+.video-frame iframe{
+  position:absolute; inset:0;
+  width:100%; height:100%; border:0;
+}
+</style>
