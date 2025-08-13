@@ -1,16 +1,18 @@
-// .eleventy.js — version CommonJS
-module.exports = function(eleventyConfig) {
-  eleventyConfig.addPassthroughCopy({"src/assets": "assets"});
-  eleventyConfig.addPassthroughCopy({"src/robots.txt": "robots.txt"});
-
-  // ➜ Collections
-  eleventyConfig.addCollection("cours", c => c.getFilteredByGlob("src/cours/**/index.md"));
-  eleventyConfig.addCollection("industrie", c => c.getFilteredByGlob("src/cours/industrie/**/index.md"));
-  eleventyConfig.addCollection("education", c => c.getFilteredByGlob("src/cours/education/**/index.md"));
+/** .eleventy.js */
+module.exports = function (eleventyConfig) {
+  // (facultatif) copier des assets si besoin
+  eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
 
   return {
-    dir: { input: "src", includes: "_includes", data: "_data", output: "_site" },
+    dir: {
+      input: "src",
+      includes: "_includes",
+      output: "_site",
+    },
+    // Très important : on rend les pages HTML et Markdown avec Nunjucks
     markdownTemplateEngine: "njk",
-    htmlTemplateEngine: "njk"
+    htmlTemplateEngine: "njk",
+    // Et on précise qu'on veut bien traiter .njk et .md
+    templateFormats: ["njk", "md", "html"]
   };
 };
