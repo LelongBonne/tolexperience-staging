@@ -1,0 +1,14 @@
+---
+title: "Cours Industrie — TOLExperience (staging)"
+layout: "layouts/base.njk"
+---
+<h1>Industrie / Pro</h1>
+<section class="grid">
+  {% for page in collections.education | reverse %}
+    <article class="card">
+      <h3><a href="{{ page.url }}">{{ page.data.title }}</a></h3>
+      {% if page.data.intro %}<p>{{ page.data.intro }}</p>{% endif %}
+      <p><a href="{{ page.url }}">Ouvrir →</a></p>
+    </article>
+  {% endfor %}
+</section>
