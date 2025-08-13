@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr" data-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="color-scheme" content="light dark">
+  <!-- Staging: on demande aux moteurs de ne pas indexer -->
+  <meta name="robots" content="noindex, nofollow">
+  <title>{{ title or "TOLExperience — staging" }}</title>
+  <style>
+    :root{
+      --blue:#005e83; --red:#a63d2f; --text:#383e42; --bg:#fff; --muted:#c8c8c7;
+    }
+    [data-theme="dark"]{ --bg:#0e1012; --text:#c8c8c7; }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+    .site-header{position:sticky;top:0;z-index:1000;background:var(--bg);
+      box-shadow:0 4px 10px rgba(0,0,0,.06);padding:10px 0}
+    .brand{display:block;margin:0 auto;max-width:320px}
+    .brand img{width:100%;height:auto;display:block;-webkit-user-drag:none;user-select:none;pointer-events:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+    nav.main{display:flex;gap:18px;justify-content:center;margin:10px 0 4px}
+    .theme{position:fixed;right:12px;top:12px;border:1px solid var(--muted);background:transparent;color:var(--text);
+      padding:6px 10px;border-radius:999px;cursor:pointer}
+    h1 .L{color:var(--red)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .card{border:1px solid rgba(0,0,0,.08);border-radius:14px;padding:18px;background:#fff}
+    @media (prefers-color-scheme: dark){ .card{background:#14171a;border-color:rgba(255,255,255,.08)} }
+  </style>
+</head>
+<body>
+  <button class="theme" id="themeBtn">Thème : auto</button>
+  <header class="site-header">
+    <a class="brand" href="/"><img src="/assets/logo1.webp" alt="TOLExperience"></a>
+    <nav class="main">
+      <a href="/">Accueil</a>
+      <a href="/videos/">Vidéos</a>
+      <a href="/cours/">Cours</a>
+      <a href="/telechargements/">Téléchargements</a>
+      <a href="/apropos/">À propos</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    {{ content | safe }}
+  </main>
+  <script>
+    (function(){
+      const root=document.documentElement, btn=document.getElementById('themeBtn');
+      const order=['auto','light','dark'];
+      function set(t){root.setAttribute('data-theme',t); localStorage.setItem('theme',t); btn.textContent='Thème : '+t;}
+      set(localStorage.getItem('theme')||'auto');
+      btn.onclick=()=>{const cur=root.getAttribute('data-theme')||'auto'; set(order[(order.indexOf(cur)+1)%order.length]);};
+    })();
+  </script>
+</body>
+</html>
