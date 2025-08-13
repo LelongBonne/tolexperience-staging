@@ -1,0 +1,20 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+  <article>
+    <h1>{{ title }}</h1>
+    {% if intro %}<p class="lead">{{ intro }}</p>{% endif %}
+
+    {% if toc and toc.length %}
+      <nav aria-label="Sommaire">
+        <ul>
+          {% for item in toc %}
+          <li><a href="#{{ item.id }}">{{ item.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+
+    {{ content | safe }}
+  </article>
+{% endblock %}
