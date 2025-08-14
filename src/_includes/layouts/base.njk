@@ -5,56 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ title or "TOLExperience" }}</title>
 
-  {# Empêche Nunjucks de parser le CSS #}
   {% raw %}
   <style>
-    /* === Polices TOL === */
+    /* ========== Polices TOL ========== */
     @font-face{font-family:"TOLArial3"; src:url("/assets/fonts/TOL-Arial3Gras-SVG.otf") format("opentype"); font-weight:700; font-style:normal; font-display:swap;}
     @font-face{font-family:"TOLArial2"; src:url("/assets/fonts/TOL-Arial2Gras-SVG.otf") format("opentype"); font-weight:400; font-style:normal; font-display:swap;}
     @font-face{font-family:"TOLArial4"; src:url("/assets/fonts/TOL-Arial4Light.otf")    format("opentype"); font-weight:300; font-style:normal; font-display:swap;}
     @font-face{font-family:"TOL-RV1";   src:url("/assets/fonts/TOLRV1.ttf")             format("truetype"); font-weight:400; font-style:normal; font-display:swap;}
 
+    /* ========== Palette et variables ========== */
     :root{
       --brand-blue:#005e83;  /* 5019 */
       --brand-red:#a63d2f;   /* 3016 */
       --grey-dark:#383e42;   /* 7016 */
       --grey-light:#c8c8c7;  /* 7047 */
 
+      /* thème clair par défaut */
       --bg:var(--grey-light);
       --text:var(--grey-dark);
       --stroke:var(--grey-dark);
 
+      /* cadre/marge */
       --frame-gap: clamp(12px, 1.2vw + 8px, 1cm);
       --border-w:3px;
-      --line-thin:1px;
-      --line-center:2px;
+      --line-thin:1px;     /* 25/75% */
+      --line-center:2px;   /* 50% */
 
+      /* longueurs repères (contenues dans la marge) */
       --tick-base:7mm;
       --tick-mid-base:9mm;
       --tick-l:     min(var(--tick-base),     var(--frame-gap));
       --tick-l-mid: min(var(--tick-mid-base), calc(var(--frame-gap) + 10px));
 
+      /* logo bas-droite (toutes pages) */
       --logo-target: 34px;
       --logo-bottom-offset: 2px;
       --logo-clear-frame:  2px;
 
-      --content-pad: clamp(10px, 2vw, 24px);
+      /* espacement interne des contenus */
+      --content-pad: clamp(14px, 2.5vw, 28px);
+
+      /* >>> Tailles de police (grossies) <<< */
+      --fs-body:18px;       /* texte courant */
+      --fs-sub:24px;        /* sous-titre (TOLArial2) */
+      --fs-title:32px;      /* titre (TOLArial2) */
+      --fs-note:18px;       /* notes TOL-RV1 */
+
+      /* panel (cadre des zones d’écriture) */
+      --panel-br: 0px;
+      --panel-bw: 2px;
+      --panel-bg: var(--bg);
+      --panel-stroke: var(--stroke);
     }
+
+    /* mode sombre via .dark (seuls les gris s’inversent) */
     html.dark{
       --bg:#0e1012;
       --text:var(--grey-light);
       --stroke:var(--grey-light);
+      --panel-bg: var(--bg);
+      --panel-stroke: var(--stroke);
     }
 
+    /* ========== Layout global ========== */
     html,body{height:100%; margin:0; -webkit-text-size-adjust:100%;}
     body{
       background:var(--bg);
       color:var(--text);
       font-family:"TOLArial4", Arial, Helvetica, sans-serif;
-      font-size:22px; line-height:1.45;
+      font-size:var(--fs-body); line-height:1.55;
+      /* tout le contenu est DANS le cadre */
       padding: calc(var(--frame-gap) + var(--content-pad)) var(--frame-gap);
     }
 
+    /* liens bleu marque partout */
     a,a:link,a:visited,a:active,a:hover,
     a[href^="mailto:"],a[href^="tel:"],a[x-apple-data-detectors]{
       color:var(--brand-blue) !important;
@@ -62,46 +86,66 @@
       text-decoration:underline;
     }
 
+    /* ===== Typographies ===== */
+    /* Titre (TOLArial2, 32px, bleu — le L rouge avec .L) */
     h1,h2,h3,.tol-title{
-      font-family:"TOLArial3", Arial, Helvetica, sans-serif;
-      font-size:26px; font-weight:700; color:var(--brand-blue);
-      margin:0 0 8px 0;
+      font-family:"TOLArial2", Arial, Helvetica, sans-serif;
+      font-size:var(--fs-title);
+      font-weight:400;
+      color:var(--brand-blue);
+      margin:0 0 12px 0;
     }
     .L{ color:var(--brand-red) !important; -webkit-text-fill-color:var(--brand-red) !important; }
 
+    /* Sous-titre (TOLArial2, 24px) */
     h4,.tol-subtitle{
       font-family:"TOLArial2", Arial, Helvetica, sans-serif;
-      font-size:24px; color:var(--grey-dark); margin:8px 0 6px 0;
+      font-size:var(--fs-sub);
+      color:var(--text);
+      margin:8px 0 10px 0;
     }
-    html.dark h4, html.dark .tol-subtitle{ color:var(--grey-light); }
 
+    /* Texte (TOLArial4) */
     p,li,td,th,.tol-text{
       font-family:"TOLArial4", Arial, Helvetica, sans-serif;
-      font-size:12px; color:var(--grey-dark);
+      font-size:var(--fs-body);
+      color:var(--text);
     }
-    html.dark p, html.dark li, html.dark td, html.dark th, html.dark .tol-text{ color:var(--grey-light); }
 
+    /* Notes (TOL-RV1) — 2 cas */
     .tol-note{
       font-family:"TOL-RV1","Comic Sans MS","Segoe Script",cursive;
-      font-size:22px; color:var(--text);
+      font-size:var(--fs-note);
+      color:var(--text);     /* gris (s’inverse) */
     }
     .tol-note.red{
       color:var(--brand-red);
       font-weight:700;
       text-decoration: underline dotted var(--stroke);
       text-decoration-thickness: 3px;
-      text-underline-offset: 2px;
+      text-underline-offset: 3px;
     }
 
+    /* ===== Zones d’écriture (cadre sans ombre) ===== */
+    .panel{
+      background: var(--panel-bg);
+      border: var(--panel-bw) solid var(--panel-stroke);
+      border-radius: var(--panel-br);
+      padding: clamp(12px, 2vw, 22px);
+      margin: 12px 0;
+    }
+
+    /* ===== Conteneur page ===== */
     .container{
       max-width: min(1100px, 100%);
       margin: 0 auto;
-      background: var(--bg);
-      padding: var(--content-pad);
-      border-radius: 0;
+      background: transparent; /* même couleur que la page */
+      padding: 0;               /* le padding est dans .panel */
       box-shadow: none;
+      border: 0;
     }
 
+    /* ===== Cadre + repères ===== */
     .page-frame{position:fixed; inset:var(--frame-gap); pointer-events:none; z-index:999;}
     .page-frame::before{content:""; position:absolute; inset:0; border:var(--border-w) solid var(--stroke); border-radius:2px}
 
@@ -116,7 +160,6 @@
       content:""; position:absolute; left:50%; transform:translateX(-50%); top:0;
       width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);
     }
-
     .tick-bottom{position:absolute; left:0; right:0; height:var(--frame-gap); bottom:calc(-1*var(--frame-gap))}
     .tick-bottom::before{
       content:""; position:absolute; left:0; right:0; bottom:0; height:var(--tick-l);
@@ -128,7 +171,6 @@
       content:""; position:absolute; left:50%; transform:translateX(-50%); bottom:0;
       width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);
     }
-
     .tick-left{position:absolute; top:0; bottom:0; width:var(--frame-gap); left:calc(-1*var(--frame-gap))}
     .tick-left::before{
       content:""; position:absolute; top:0; bottom:0; left:0; width:var(--tick-l);
@@ -140,7 +182,6 @@
       content:""; position:absolute; top:50%; transform:translateY(-50%); left:0;
       height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);
     }
-
     .tick-right{position:absolute; top:0; bottom:0; width:var(--frame-gap); right:calc(-1*var(--frame-gap))}
     .tick-right::before{
       content:""; position:absolute; top:0; bottom:0; right:0; width:var(--tick-l);
@@ -153,6 +194,8 @@
       height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);
     }
 
+    /* ===== Logos ===== */
+    /* en bas-droite (toutes pages) */
     .frame-logo{
       position:fixed;
       right:var(--frame-gap);
@@ -161,20 +204,66 @@
       width:auto; object-fit:contain; opacity:.95;
       z-index:1000; pointer-events:none;
     }
+    /* logo home (optionnel via front-matter) */
+    .home-logo{
+      display:block;
+      margin: 0 auto var(--content-pad) auto;
+      height: clamp(60px, 12vw, 140px);
+      width:auto; object-fit:contain;
+    }
 
+    /* ===== Bouton thème (pastille) ===== */
     .theme-toggle{
       position:fixed; top:10px; right:10px; z-index:2000;
-      padding:6px 10px; border:none; border-radius:4px;
-      background:var(--brand-blue); color:#fff; cursor:pointer;
-      font-size:12px; font-family:"TOLArial3";
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:8px 12px; border:none; border-radius:999px;
+      background:transparent; color:var(--text); cursor:pointer;
+      font: 600 14px "TOLArial2", Arial, sans-serif;
+      border:1.5px solid var(--stroke);
+    }
+    .theme-toggle .icon{font-size:16px; line-height:1}
+
+    /* ===== Nav retour / accueil ===== */
+    .nav-links{
+      position:fixed; top:10px; left:10px; z-index:2000;
+      display:flex; gap:8px;
+    }
+    .nav-links a, .nav-links button{
+      padding:6px 10px; border-radius:8px; border:1.5px solid var(--stroke);
+      background:transparent; color:var(--text); text-decoration:none;
+      font: 600 14px "TOLArial2", Arial, sans-serif;
+      cursor:pointer;
+    }
+
+    /* ===== PDF embarqué ===== */
+    .pdf-embed{
+      width:100%;
+      height:min(70vh, 900px);
+      border:2px solid var(--stroke);
+      background:#fff; /* lisible en clair comme sombre */
+    }
+
+    @media (max-width:520px){
+      .theme-toggle{padding:6px 10px; font-size:13px}
+      .nav-links a, .nav-links button{font-size:13px}
     }
   </style>
   {% endraw %}
 </head>
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()">Thème</button>
+<!-- Nav retour + accueil -->
+<nav class="nav-links" aria-label="Navigation rapide">
+  <button type="button" onclick="history.length>1 ? history.back() : location.href='/'">← Retour</button>
+  <a href="/">Accueil</a>
+</nav>
 
+<!-- Bascule thème -->
+<button class="theme-toggle" id="themeBtn" type="button" onclick="toggleTheme()">
+  <span class="icon" id="themeIcon">🌙</span> <span id="themeText">Sombre</span>
+</button>
+
+<!-- Cadre + repères -->
 <div class="page-frame" aria-hidden="true">
   <div class="tick-top"></div>
   <div class="tick-bottom"></div>
@@ -182,24 +271,37 @@
   <div class="tick-right"></div>
 </div>
 
-<img class="frame-logo" src="/assets/logo0.webp" alt="">
+<!-- Logo bas-droite (toujours) -->
+<img class="frame-logo" src="/assets/logo0.webp" alt="TOLExperience">
 
+<!-- Contenu dans le cadre -->
 <main class="container">
+  {# Logo d’accueil optionnel #}
+  {% if home_logo %}
+    <img class="home-logo" src="/assets/logo1.webp" alt="TOLExperience">
+  {% endif %}
+
   {{ content | safe }}
 </main>
 
-{# Empêche Nunjucks de parser le JS #}
 {% raw %}
 <script>
-function toggleTheme(){
-  document.documentElement.classList.toggle('dark');
-  localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-}
-(function(){
-  if(localStorage.getItem('theme') === 'dark'){
-    document.documentElement.classList.add('dark');
+  function applyThemeUI(){
+    const dark = document.documentElement.classList.contains('dark');
+    document.getElementById('themeIcon').textContent = dark ? '☀️' : '🌙';
+    document.getElementById('themeText').textContent = dark ? 'Clair' : 'Sombre';
   }
-})();
+  function toggleTheme(){
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    applyThemeUI();
+  }
+  (function initTheme(){
+    if(localStorage.getItem('theme') === 'dark'){
+      document.documentElement.classList.add('dark');
+    }
+    applyThemeUI();
+  })();
 </script>
 {% endraw %}
 </body>
