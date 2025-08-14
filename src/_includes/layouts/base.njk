@@ -62,10 +62,11 @@
     background:var(--bg);
     color:var(--text);
     font-family:"TOLArial4", Arial, Helvetica, sans-serif;
-    font-size:16px;               /* lisible par défaut (tu ajusteras si besoin) */
+    font-size:16px;
     line-height:1.55;
     /* tout le contenu reste à l’intérieur du cadre */
-    padding: calc(var(--frame-gap) + var(--content-pad)) var(--frame-gap) var(--frame-gap);
+    /* ⬇️ CORRECTION: on ajoute aussi + var(--content-pad) en bas pour éviter le débordement */
+    padding: calc(var(--frame-gap) + var(--content-pad)) var(--frame-gap) calc(var(--frame-gap) + var(--content-pad));
   }
 
   /* Liens : bleu marque (anti-jaune Android) */
@@ -112,7 +113,7 @@
     max-width: min(1100px, 100%);
     margin: 0 auto;
     background: var(--bg);
-    padding: 0; /* on gère les marges avec .section */
+    padding: 0;
   }
   .section{ padding: var(--content-pad); }
 
@@ -197,22 +198,21 @@
   .controls{
     position: fixed; top: 0; left: 0; right: 0;
     height: var(--frame-gap);
-    pointer-events: none;                  /* seule chaque touche capte les clics */
+    pointer-events: none;
     z-index: 1100;
   }
   .controls button{
     position: absolute;
-    top: 0; bottom: 0; margin: auto 0;     /* centré verticalement dans la marge */
+    top: 0; bottom: 0; margin: auto 0;
     background: transparent; border: 0;
     color: var(--stroke);
     font-family:"TOLArial2", Arial, Helvetica, sans-serif;
     font-weight: 700;
-    font-size: var(--btn-font);            /* PLUS GRAND & responsive */
+    font-size: var(--btn-font);
     line-height: 1;
-    padding: 0 0.4em;                      /* un peu d’air */
+    padding: 0 0.4em;
     white-space: nowrap; pointer-events: auto; cursor: pointer;
   }
-  /* placement précis */
   .btn-back  { right: calc(50% + var(--btn-gap)); }
   .btn-home  { left:  calc(50% + var(--btn-gap)); }
   .btn-theme { right: var(--frame-gap); }
@@ -259,5 +259,4 @@
   </script>
 </body>
 </html>
-
 
