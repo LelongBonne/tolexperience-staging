@@ -14,42 +14,35 @@
 
   /* === Couleurs & variables === */
   :root{
-    --brand-blue:#005e83;  /* 5019 */
-    --brand-red:#a63d2f;   /* 3016 */
-    --grey-dark:#383e42;   /* 7016 */
-    --grey-light:#c8c8c7;  /* 7047 */
+    --brand-blue:#005e83;
+    --brand-red:#a63d2f;
+    --grey-dark:#383e42;
+    --grey-light:#c8c8c7;
 
-    /* Thème clair par défaut (bleu/rouge inchangés) */
     --bg:var(--grey-light);
     --text:var(--grey-dark);
     --stroke:var(--grey-dark);
 
-    /* Cadre / marges */
     --frame-gap: clamp(12px, 1.2vw + 8px, 1cm);
     --border-w:3px;
-    --line-thin:1px;      /* 25% & 75% */
-    --line-center:2px;    /* 50% */
+    --line-thin:1px;
+    --line-center:2px;
 
-    /* Longueurs des séparations (contenues dans la marge) */
     --tick-base:7mm;
     --tick-mid-base:9mm;
     --tick-l:     min(var(--tick-base),     var(--frame-gap));
     --tick-l-mid: min(var(--tick-mid-base), calc(var(--frame-gap) + 10px));
 
-    /* Logo bas-droite (bord droit aligné au cadre) */
     --logo-target: 34px;
     --logo-bottom-offset: 2px;
     --logo-clear-frame:  2px;
 
-    /* Contenus à l’intérieur du cadre */
     --content-pad: clamp(12px, 2.2vw, 28px);
 
-    /* Boutons marge haute (PLUS GRANDS) */
     --btn-gap: clamp(6px, 1vw, 14px);
     --btn-font: clamp(14px, calc(var(--frame-gap)*0.90), 34px);
   }
 
-  /* Thème sombre (seuls les gris s’inversent) */
   html.dark{
     --bg:#0e1012;
     --text:var(--grey-light);
@@ -57,16 +50,17 @@
   }
 
   /* === Base === */
+  *,*::before,*::after{ box-sizing:border-box; }
   html,body{height:100%; margin:0; -webkit-text-size-adjust:100%;}
   body{
     background:var(--bg);
     color:var(--text);
     font-family:"TOLArial4", Arial, Helvetica, sans-serif;
-    font-size:16px;
-    line-height:1.55;
-    /* tout le contenu reste à l’intérieur du cadre */
-    /* ⬇️ CORRECTION: on ajoute aussi + var(--content-pad) en bas pour éviter le débordement */
-    padding: calc(var(--frame-gap) + var(--content-pad)) var(--frame-gap) calc(var(--frame-gap) + var(--content-pad));
+    font-size:16px; line-height:1.55;
+    /* pas de gros padding : la zone scrollable gère les espacements */
+    padding: 0;
+    min-height: 100dvh;
+    overflow: hidden; /* ⬅ on enlève le scroll de la page */
   }
 
   /* Liens : bleu marque (anti-jaune Android) */
@@ -77,114 +71,81 @@
     text-decoration:underline;
   }
 
-  /* Typo (selon tes consignes) */
+  /* Typo */
   h1,h2,h3,.tol-title{
-    font-family:"TOLArial2", Arial, Helvetica, sans-serif; /* ce qui était en 3 → 2 */
+    font-family:"TOLArial2", Arial, Helvetica, sans-serif;
     font-size:32px; font-weight:700; color:var(--brand-blue);
     margin:0 0 12px 0;
   }
   .L{ color:var(--brand-red) !important; -webkit-text-fill-color:var(--brand-red) !important; }
+  h4,.tol-subtitle{ font-family:"TOLArial2"; font-size:24px; color:var(--text); margin:8px 0 10px; }
+  p,li,td,th,.tol-text{ font-family:"TOLArial4"; font-size:18px; color:var(--text); margin:0 0 .7em 0; }
 
-  h4,.tol-subtitle{
-    font-family:"TOLArial2", Arial, Helvetica, sans-serif;
-    font-size:24px; color:var(--text); margin:8px 0 10px;
-  }
-
-  p,li,td,th,.tol-text{
-    font-family:"TOLArial4", Arial, Helvetica, sans-serif;
-    font-size:18px; color:var(--text);
-  }
-
-  /* Notes (TOL-RV1) : 2 états */
-  .tol-note{
-    font-family:"TOL-RV1","Comic Sans MS","Segoe Script",cursive;
-    font-size:18px; color:var(--text);
-  }
+  .tol-note{ font-family:"TOL-RV1","Comic Sans MS","Segoe Script",cursive; font-size:18px; color:var(--text); }
   .tol-note.red{
-    color:var(--brand-red);
-    font-weight:700;
+    color:var(--brand-red); font-weight:700;
     text-decoration: underline dotted var(--stroke);
-    text-decoration-thickness: 3px;
-    text-underline-offset: 3px;
+    text-decoration-thickness: 3px; text-underline-offset: 3px;
   }
 
-  /* Conteneur de page (fond = bg, pas d’ombre) */
+  /* === ZONE SCROLLABLE À L’INTÉRIEUR DU CADRE === */
+  .viewport{
+    position: fixed;
+    /* bords intérieurs du cadre */
+    top:    calc(var(--frame-gap));
+    right:  calc(var(--frame-gap));
+    bottom: calc(var(--frame-gap));
+    left:   calc(var(--frame-gap));
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    z-index: 100; /* sous le cadre (z=999) */
+    /* respirations afin que le texte reste à l’intérieur du cadre */
+    padding: var(--content-pad);
+    background: var(--bg);
+  }
+
+  /* Conteneur interne (utile si tu veux des .section) */
   .container{
-    max-width: min(1100px, 100%);
+    max-width:min(1100px, 100%);
     margin: 0 auto;
     background: var(--bg);
-    padding: 0;
   }
-  .section{ padding: var(--content-pad); }
 
-  /* Grille de l’accueil */
+  /* Grille accueil */
   .grid{
     display:grid; gap: clamp(12px,2vw,20px);
     grid-template-columns: repeat(3, minmax(0,1fr));
   }
   @media (max-width: 980px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
   @media (max-width: 620px){ .grid{ grid-template-columns: 1fr; } }
+  .card{ border:2px solid var(--stroke); padding: clamp(12px, 2vw, 20px); background: var(--bg); }
 
-  .card{
-    border:2px solid var(--stroke);
-    padding: clamp(12px, 2vw, 20px);
-    border-radius: 0;
-    background: var(--bg);
-  }
-
-  /* === Cadre global + repères 25/50/75 === */
+  /* === Cadre + repères 25/50/75 === */
   .page-frame{position:fixed; inset:var(--frame-gap); pointer-events:none; z-index:999;}
   .page-frame::before{content:""; position:absolute; inset:0; border:var(--border-w) solid var(--stroke); border-radius:2px}
-
   .tick-top{position:absolute; left:0; right:0; height:var(--frame-gap); top:calc(-1*var(--frame-gap))}
-  .tick-top::before{
-    content:""; position:absolute; left:0; right:0; top:0; height:var(--tick-l);
-    background:
-      linear-gradient(var(--stroke),var(--stroke)) 25% 0/var(--line-thin) 100% no-repeat,
-      linear-gradient(var(--stroke),var(--stroke)) 75% 0/var(--line-thin) 100% no-repeat;
-  }
-  .tick-top::after{
-    content:""; position:absolute; left:50%; transform:translateX(-50%); top:0;
-    width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);
-  }
-
+  .tick-top::before{content:""; position:absolute; left:0; right:0; top:0; height:var(--tick-l);
+    background:linear-gradient(var(--stroke),var(--stroke)) 25% 0/var(--line-thin) 100% no-repeat,
+               linear-gradient(var(--stroke),var(--stroke)) 75% 0/var(--line-thin) 100% no-repeat;}
+  .tick-top::after{content:""; position:absolute; left:50%; transform:translateX(-50%); top:0; width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);}
   .tick-bottom{position:absolute; left:0; right:0; height:var(--frame-gap); bottom:calc(-1*var(--frame-gap))}
-  .tick-bottom::before{
-    content:""; position:absolute; left:0; right:0; bottom:0; height:var(--tick-l);
-    background:
-      linear-gradient(var(--stroke),var(--stroke)) 25% 0/var(--line-thin) 100% no-repeat,
-      linear-gradient(var(--stroke),var(--stroke)) 75% 0/var(--line-thin) 100% no-repeat;
-  }
-  .tick-bottom::after{
-    content:""; position:absolute; left:50%; transform:translateX(-50%); bottom:0;
-    width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);
-  }
-
+  .tick-bottom::before{content:""; position:absolute; left:0; right:0; bottom:0; height:var(--tick-l);
+    background:linear-gradient(var(--stroke),var(--stroke)) 25% 0/var(--line-thin) 100% no-repeat,
+               linear-gradient(var(--stroke),var(--stroke)) 75% 0/var(--line-thin) 100% no-repeat;}
+  .tick-bottom::after{content:""; position:absolute; left:50%; transform:translateX(-50%); bottom:0; width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);}
   .tick-left{position:absolute; top:0; bottom:0; width:var(--frame-gap); left:calc(-1*var(--frame-gap))}
-  .tick-left::before{
-    content:""; position:absolute; top:0; bottom:0; left:0; width:var(--tick-l);
-    background:
-      linear-gradient(90deg,var(--stroke),var(--stroke)) 0 25%/100% var(--line-thin) no-repeat,
-      linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;
-  }
-  .tick-left::after{
-    content:""; position:absolute; top:50%; transform:translateY(-50%); left:0;
-    height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);
-  }
-
+  .tick-left::before{content:""; position:absolute; top:0; bottom:0; left:0; width:var(--tick-l);
+    background:linear-gradient(90deg,var(--stroke),var(--stroke)) 0 25%/100% var(--line-thin) no-repeat,
+               linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;}
+  .tick-left::after{content:""; position:absolute; top:50%; transform:translateY(-50%); left:0; height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);}
   .tick-right{position:absolute; top:0; bottom:0; width:var(--frame-gap); right:calc(-1*var(--frame-gap))}
-  .tick-right::before{
-    content:""; position:absolute; top:0; bottom:0; right:0; width:var(--tick-l);
-    background:
-      linear-gradient(90deg,var(--stroke),var(--stroke)) 0 25%/100% var(--line-thin) no-repeat,
-      linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;
-  }
-  .tick-right::after{
-    content:""; position:absolute; top:50%; transform:translateY(-50%); right:0;
-    height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);
-  }
+  .tick-right::before{content:""; position:absolute; top:0; bottom:0; right:0; width:var(--tick-l);
+    background:linear-gradient(90deg,var(--stroke),var(--stroke)) 0 25%/100% var(--line-thin) no-repeat,
+               linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;}
+  .tick-right::after{content:""; position:absolute; top:50%; transform:translateY(-50%); right:0; height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);}
 
-  /* Logo bas-droite (dans la marge, aligné au bord droit du cadre) */
+  /* Logo bas-droite */
   .frame-logo{
     position:fixed;
     right:var(--frame-gap);
@@ -194,16 +155,14 @@
     z-index:1000; pointer-events:none;
   }
 
-  /* === Boutons dans la marge haute (texte gris, grands, responsifs) === */
+  /* Boutons dans la marge haute */
   .controls{
     position: fixed; top: 0; left: 0; right: 0;
     height: var(--frame-gap);
-    pointer-events: none;
-    z-index: 1100;
+    pointer-events: none; z-index: 1100;
   }
   .controls button{
-    position: absolute;
-    top: 0; bottom: 0; margin: auto 0;
+    position: absolute; top: 0; bottom: 0; margin: auto 0;
     background: transparent; border: 0;
     color: var(--stroke);
     font-family:"TOLArial2", Arial, Helvetica, sans-serif;
@@ -220,14 +179,14 @@
 </head>
 <body>
 
-  <!-- Barre de contrôle (marge haute) -->
+  <!-- Barre de contrôle -->
   <div class="controls" aria-hidden="false">
     <button class="btn-back"  type="button" onclick="goBack()"   aria-label="Retour">Retour</button>
     <button class="btn-home"  type="button" onclick="location.href='/'" aria-label="Accueil">Accueil</button>
     <button class="btn-theme" type="button" onclick="toggleTheme()" aria-label="Changer de thème">Thème</button>
   </div>
 
-  <!-- Cadre + repères -->
+  <!-- Cadre + repères (au-dessus du contenu) -->
   <div class="page-frame" aria-hidden="true">
     <div class="tick-top"></div>
     <div class="tick-bottom"></div>
@@ -235,28 +194,23 @@
     <div class="tick-right"></div>
   </div>
 
-  <!-- Logo bas-droite (toutes pages) -->
+  <!-- Logo -->
   <img class="frame-logo" src="/assets/logo0.webp" alt="TOLExperience">
 
-  <!-- Contenus (toujours dans le cadre) -->
-  <main class="container">
-    {{ content | safe }}
-  </main>
+  <!-- ⬇ Zone scrollable interne au cadre -->
+  <div class="viewport">
+    <main class="container">
+      {{ content | safe }}
+    </main>
+  </div>
 
   <script>
     function toggleTheme(){
       document.documentElement.classList.toggle('dark');
       localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     }
-    (function(){
-      if(localStorage.getItem('theme') === 'dark'){
-        document.documentElement.classList.add('dark');
-      }
-    })();
-    function goBack(){
-      if (history.length > 1) history.back(); else location.href = '/';
-    }
+    (function(){ if(localStorage.getItem('theme') === 'dark'){ document.documentElement.classList.add('dark'); }})();
+    function goBack(){ if (history.length > 1) history.back(); else location.href = '/'; }
   </script>
 </body>
 </html>
-
