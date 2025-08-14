@@ -3,46 +3,43 @@ title: "Accueil — TOLExperience (staging)"
 layout: "layouts/base.njk"
 ---
 
-{% block hero %}
-  <style>
-    /* Styles spécifiques à l’accueil */
-    .home-hero{
-      display:flex; justify-content:center; margin: 0 0 clamp(10px,2vw,18px) 0;
-    }
-    .home-hero img{
-      height: clamp(42px, 7vw, 80px); width:auto; object-fit:contain;
-    }
-  </style>
+<style>
+  .home-hero{
+    display:flex; justify-content:center; margin: 0 0 clamp(12px,2.4vw,24px);
+  }
+  .home-hero img{
+    height: clamp(64px, 12vw, 150px); width:auto; object-fit:contain;
+  }
+</style>
+
+<div class="section">
+  <!-- Logo1 centré en haut (accueil) -->
   <div class="home-hero" aria-hidden="true">
-    <!-- Pense à déposer /assets/logo1.webp -->
     <img src="/assets/logo1.webp" alt="TOLExperience">
   </div>
-{% endblock %}
 
-{% block content %}
+  <h1 class="tol-title">
+    <span class="L">L</span>e savoir-faire industriel au service de l’éducation et de la performance
+  </h1>
 
-<h1 class="tol-title">
-  <span class="L">L</span>e savoir-faire industriel au service de l’éducation et de la performance
-</h1>
+  <section class="grid">
+    <div class="card">
+      <h3 class="tol-title">Vidéos</h3>
+      <p class="tol-text">Tutoriels, démonstrations, retours d’expérience.</p>
+      <p class="tol-text"><a href="/videos/">Voir la page vidéos →</a></p>
+    </div>
 
-<section class="grid">
-  <div class="card">
-    <h3 class="tol-title">Vidéos</h3>
-    <p class="tol-text">Tutoriels, démonstrations, retours d’expérience.</p>
-    <p class="tol-text"><a href="/videos/">Voir la page vidéos →</a></p>
-  </div>
+    <div class="card">
+      <h3 class="tol-title">Cours</h3>
+      <p class="tol-text">Cours structurés (Pro / CAP / Bac Pro), consultation en ligne et PDF.</p>
+      <p class="tol-text"><a href="/cours/">Explorer les cours →</a></p>
+    </div>
 
-  <div class="card">
-    <h3 class="tol-title">Cours</h3>
-    <p class="tol-text">Cours structurés (Pro / CAP / Bac Pro), consultation en ligne et PDF.</p>
-    <p class="tol-text"><a href="/cours/">Explorer les cours →</a></p>
-  </div>
+    <div class="card">
+      <h3 class="tol-title">Téléchargements</h3>
+      <p class="tol-text">PDF complets et fichiers SolidWorks à la demande.</p>
+      <p class="tol-text"><a href="/telechargements/">Accéder à la bibliothèque →</a></p>
+    </div>
+  </section>
+</div>
 
-  <div class="card">
-    <h3 class="tol-title">Téléchargements</h3>
-    <p class="tol-text">PDF complets et fichiers SolidWorks à la demande.</p>
-    <p class="tol-text"><a href="/telechargements/">Accéder à la bibliothèque →</a></p>
-  </div>
-</section>
-
-{% endblock %}
