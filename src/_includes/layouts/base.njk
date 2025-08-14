@@ -1,245 +1,263 @@
 <!doctype html>
-<html lang="fr" class="{% if theme == 'dark' %}dark{% endif %}">
+<html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{% if title %}{{ title }}{% else %}TOLExperience{% endif %}</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title | default("TOLExperience") }}</title>
 
-<style>
-/* === Polices TOL === */
-@font-face{font-family:"TOLArial3"; src:url("/fonts/TOL-Arial3Gras-SVG.otf") format("opentype"); font-weight:700; font-style:normal; font-display:swap;}
-@font-face{font-family:"TOLArial2"; src:url("/fonts/TOL-Arial2Gras-SVG.otf") format("opentype"); font-weight:400; font-style:normal; font-display:swap;}
-@font-face{font-family:"TOLArial4"; src:url("/fonts/TOL-Arial4Light.otf")    format("opentype"); font-weight:300; font-style:normal; font-display:swap;}
-@font-face{font-family:"TOL-RV1";   src:url("/fonts/TOLRV1.ttf")             format("truetype"); font-weight:400; font-style:normal; font-display:swap;}
+  <style>
+  /* === Polices TOL === */
+  @font-face{font-family:"TOLArial3"; src:url("/assets/fonts/TOL-Arial3Gras-SVG.otf") format("opentype"); font-weight:700; font-style:normal; font-display:swap;}
+  @font-face{font-family:"TOLArial2"; src:url("/assets/fonts/TOL-Arial2Gras-SVG.otf") format("opentype"); font-weight:400; font-style:normal; font-display:swap;}
+  @font-face{font-family:"TOLArial4"; src:url("/assets/fonts/TOL-Arial4Light.otf")    format("opentype"); font-weight:300; font-style:normal; font-display:swap;}
+  @font-face{font-family:"TOL-RV1";   src:url("/assets/fonts/TOLRV1.ttf")             format("truetype"); font-weight:400; font-style:normal; font-display:swap;}
 
-/* === Couleurs marque + variables === */
-:root{
-  --brand-blue:#005e83;
-  --brand-red:#a63d2f;
-  --grey-dark:#383e42;
-  --grey-light:#c8c8c7;
+  /* === Couleurs & variables === */
+  :root{
+    --brand-blue:#005e83;  /* 5019 */
+    --brand-red:#a63d2f;   /* 3016 */
+    --grey-dark:#383e42;   /* 7016 */
+    --grey-light:#c8c8c7;  /* 7047 */
 
-  --bg:var(--grey-light);
-  --text:var(--grey-dark);
-  --stroke:var(--grey-dark);
+    /* Thème clair par défaut (bleu/rouge inchangés) */
+    --bg:var(--grey-light);
+    --text:var(--grey-dark);
+    --stroke:var(--grey-dark);
 
-  --frame-gap: clamp(12px, 1.2vw + 8px, 1cm);
-  --border-w:3px;
-  --line-thin:1px;
-  --line-center:2px;
+    /* Cadre / marges */
+    --frame-gap: clamp(12px, 1.2vw + 8px, 1cm);
+    --border-w:3px;
+    --line-thin:1px;      /* 25% & 75% */
+    --line-center:2px;    /* 50% */
 
-  --tick-base:7mm;
-  --tick-mid-base:9mm;
-  --tick-l:     min(var(--tick-base),     var(--frame-gap));
-  --tick-l-mid: min(var(--tick-mid-base), calc(var(--frame-gap) + 10px));
+    /* Longueurs des séparations (contenues dans la marge) */
+    --tick-base:7mm;
+    --tick-mid-base:9mm;
+    --tick-l:     min(var(--tick-base),     var(--frame-gap));
+    --tick-l-mid: min(var(--tick-mid-base), calc(var(--frame-gap) + 10px));
 
-  --logo-target: 34px;
-  --logo-bottom-offset: 2px;
-  --logo-clear-frame: 2px;
+    /* Logo bas-droite (bord droit aligné au cadre) */
+    --logo-target: 34px;
+    --logo-bottom-offset: 2px;
+    --logo-clear-frame:  2px;
 
-  --content-pad: clamp(10px, 2vw, 24px);
-  --btn-gap: clamp(4px, 0.8vw, 12px);
-}
+    /* Contenus à l’intérieur du cadre */
+    --content-pad: clamp(12px, 2.2vw, 28px);
 
-/* Thème sombre */
-html.dark{
-  --bg:#0e1012;
-  --text:var(--grey-light);
-  --stroke:var(--grey-light);
-}
+    /* Boutons marge haute (PLUS GRANDS) */
+    --btn-gap: clamp(6px, 1vw, 14px);
+    --btn-font: clamp(14px, calc(var(--frame-gap)*0.55), 22px);
+  }
 
-/* Base */
-html,body{height:100%; margin:0; -webkit-text-size-adjust:100%;}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:"TOLArial4", Arial, Helvetica, sans-serif;
-  font-size:12px;
-  line-height:1.45;
-  padding: calc(var(--frame-gap) + var(--content-pad)) var(--frame-gap);
-}
+  /* Thème sombre (seuls les gris s’inversent) */
+  html.dark{
+    --bg:#0e1012;
+    --text:var(--grey-light);
+    --stroke:var(--grey-light);
+  }
 
-/* Liens */
-a,a:link,a:visited,a:active,a:hover,
-a[href^="mailto:"],a[href^="tel:"],a[x-apple-data-detectors]{
-  color:var(--brand-blue) !important;
-  -webkit-text-fill-color:var(--brand-blue) !important;
-  text-decoration:underline;
-}
+  /* === Base === */
+  html,body{height:100%; margin:0; -webkit-text-size-adjust:100%;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"TOLArial4", Arial, Helvetica, sans-serif;
+    font-size:16px;               /* lisible par défaut (tu ajusteras si besoin) */
+    line-height:1.55;
+    /* tout le contenu reste à l’intérieur du cadre */
+    padding: calc(var(--frame-gap) + var(--content-pad)) var(--frame-gap) var(--frame-gap);
+  }
 
-/* Typo */
-h1,h2,h3,.tol-title{
-  font-family:"TOLArial3", Arial, Helvetica, sans-serif;
-  font-size:16px; font-weight:700; color:var(--brand-blue);
-  margin:0 0 8px 0;
-}
-.L{ color:var(--brand-red) !important; -webkit-text-fill-color:var(--brand-red) !important; }
+  /* Liens : bleu marque (anti-jaune Android) */
+  a,a:link,a:visited,a:active,a:hover,
+  a[href^="mailto:"],a[href^="tel:"],a[x-apple-data-detectors]{
+    color:var(--brand-blue) !important;
+    -webkit-text-fill-color:var(--brand-blue) !important;
+    text-decoration:underline;
+  }
 
-h4,.tol-subtitle{
-  font-family:"TOLArial2", Arial, Helvetica, sans-serif;
-  font-size:14px; color:var(--grey-dark); margin:8px 0 6px 0;
-}
-html.dark h4, html.dark .tol-subtitle{ color:var(--grey-light); }
+  /* Typo (selon tes consignes) */
+  h1,h2,h3,.tol-title{
+    font-family:"TOLArial2", Arial, Helvetica, sans-serif; /* ce qui était en 3 → 2 */
+    font-size:32px; font-weight:700; color:var(--brand-blue);
+    margin:0 0 12px 0;
+  }
+  .L{ color:var(--brand-red) !important; -webkit-text-fill-color:var(--brand-red) !important; }
 
-p,li,td,th,.tol-text{
-  font-family:"TOLArial4", Arial, Helvetica, sans-serif;
-  font-size:12px; color:var(--grey-dark);
-}
-html.dark p, html.dark li, html.dark td, html.dark th, html.dark .tol-text{ color:var(--grey-light); }
+  h4,.tol-subtitle{
+    font-family:"TOLArial2", Arial, Helvetica, sans-serif;
+    font-size:24px; color:var(--text); margin:8px 0 10px;
+  }
 
-.tol-note{
-  font-family:"TOL-RV1","Comic Sans MS","Segoe Script",cursive;
-  font-size:12px; color:var(--text);
-}
-.tol-note.red{
-  color:var(--brand-red);
-  font-weight:700;
-  text-decoration: underline dotted var(--stroke);
-  text-decoration-thickness: 3px;
-  text-underline-offset: 2px;
-}
+  p,li,td,th,.tol-text{
+    font-family:"TOLArial4", Arial, Helvetica, sans-serif;
+    font-size:18px; color:var(--text);
+  }
 
-/* Zone de contenu */
-.container{
-  max-width: min(1100px, 100%);
-  margin: 0 auto;
-  background: var(--bg);
-  padding: var(--content-pad);
-  border-radius: 0;
-  box-shadow: none;
-}
+  /* Notes (TOL-RV1) : 2 états */
+  .tol-note{
+    font-family:"TOL-RV1","Comic Sans MS","Segoe Script",cursive;
+    font-size:18px; color:var(--text);
+  }
+  .tol-note.red{
+    color:var(--brand-red);
+    font-weight:700;
+    text-decoration: underline dotted var(--stroke);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 3px;
+  }
 
-/* Cadre global */
-.page-frame{position:fixed; inset:var(--frame-gap); pointer-events:none; z-index:999;}
-.page-frame::before{content:""; position:absolute; inset:0; border:var(--border-w) solid var(--stroke); border-radius:2px}
+  /* Conteneur de page (fond = bg, pas d’ombre) */
+  .container{
+    max-width: min(1100px, 100%);
+    margin: 0 auto;
+    background: var(--bg);
+    padding: 0; /* on gère les marges avec .section */
+  }
+  .section{ padding: var(--content-pad); }
 
-/* Ticks */
-.tick-top, .tick-bottom, .tick-left, .tick-right{position:absolute;}
-.tick-top{left:0; right:0; height:var(--frame-gap); top:calc(-1*var(--frame-gap))}
-.tick-top::before{
-  content:""; position:absolute; left:0; right:0; top:0; height:var(--tick-l);
-  background:
-    linear-gradient(var(--stroke),var(--stroke)) 25% 0/var(--line-thin) 100% no-repeat,
-    linear-gradient(var(--stroke),var(--stroke)) 75% 0/var(--line-thin) 100% no-repeat;
-}
-.tick-top::after{
-  content:""; position:absolute; left:50%; transform:translateX(-50%); top:0;
-  width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);
-}
+  /* Grille de l’accueil */
+  .grid{
+    display:grid; gap: clamp(12px,2vw,20px);
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+  @media (max-width: 980px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 620px){ .grid{ grid-template-columns: 1fr; } }
 
-.tick-bottom{left:0; right:0; height:var(--frame-gap); bottom:calc(-1*var(--frame-gap))}
-.tick-bottom::before{
-  content:""; position:absolute; left:0; right:0; bottom:0; height:var(--tick-l);
-  background:
-    linear-gradient(var(--stroke),var(--stroke)) 25% 0/var(--line-thin) 100% no-repeat,
-    linear-gradient(var(--stroke),var(--stroke)) 75% 0/var(--line-thin) 100% no-repeat;
-}
-.tick-bottom::after{
-  content:""; position:absolute; left:50%; transform:translateX(-50%); bottom:0;
-  width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);
-}
+  .card{
+    border:2px solid var(--stroke);
+    padding: clamp(12px, 2vw, 20px);
+    border-radius: 0;
+    background: var(--bg);
+  }
 
-.tick-left{top:0; bottom:0; width:var(--frame-gap); left:calc(-1*var(--frame-gap))}
-.tick-left::before{
-  content:""; position:absolute; top:0; bottom:0; left:0; width:var(--tick-l);
-  background:
-    linear-gradient(90deg,var(--stroke),var(--stroke)) 0 25%/100% var(--line-thin) no-repeat,
-    linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;
-}
-.tick-left::after{
-  content:""; position:absolute; top:50%; transform:translateY(-50%); left:0;
-  height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);
-}
+  /* === Cadre global + repères 25/50/75 === */
+  .page-frame{position:fixed; inset:var(--frame-gap); pointer-events:none; z-index:999;}
+  .page-frame::before{content:""; position:absolute; inset:0; border:var(--border-w) solid var(--stroke); border-radius:2px}
 
-.tick-right{top:0; bottom:0; width:var(--frame-gap); right:calc(-1*var(--frame-gap))}
-.tick-right::before{
-  content:""; position:absolute; top:0; bottom:0; right:0; width:var(--tick-l);
-  background:
-    linear-gradient(90deg,var(--stroke),var(--stroke)) 0 25%/100% var(--line-thin) no-repeat,
-    linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;
-}
-.tick-right::after{
-  content:""; position:absolute; top:50%; transform:translateY(-50%); right:0;
-  height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);
-}
+  .tick-top{position:absolute; left:0; right:0; height:var(--frame-gap); top:calc(-1*var(--frame-gap))}
+  .tick-top::before{
+    content:""; position:absolute; left:0; right:0; top:0; height:var(--tick-l);
+    background:
+      linear-gradient(var(--stroke),var(--stroke)) 25% 0/var(--line-thin) 100% no-repeat,
+      linear-gradient(var(--stroke),var(--stroke)) 75% 0/var(--line-thin) 100% no-repeat;
+  }
+  .tick-top::after{
+    content:""; position:absolute; left:50%; transform:translateX(-50%); top:0;
+    width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);
+  }
 
-/* Logo bas-droite */
-.frame-logo{
-  position:fixed;
-  right:var(--frame-gap);
-  bottom:var(--logo-bottom-offset);
-  height:min(var(--logo-target), calc(var(--frame-gap) - var(--logo-bottom-offset) - var(--logo-clear-frame)));
-  width:auto; object-fit:contain; opacity:.95;
-  z-index:1000; pointer-events:none;
-}
+  .tick-bottom{position:absolute; left:0; right:0; height:var(--frame-gap); bottom:calc(-1*var(--frame-gap))}
+  .tick-bottom::before{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:var(--tick-l);
+    background:
+      linear-gradient(var(--stroke),var(--stroke)) 25% 0/var(--line-thin) 100% no-repeat,
+      linear-gradient(var(--stroke),var(--stroke)) 75% 0/var(--line-thin) 100% no-repeat;
+  }
+  .tick-bottom::after{
+    content:""; position:absolute; left:50%; transform:translateX(-50%); bottom:0;
+    width:var(--line-center); height:var(--tick-l-mid); background:var(--stroke);
+  }
 
-/* === Barre de contrôle === */
-.controls{
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: var(--frame-gap);
-  pointer-events: none;
-  z-index: 1100;
-}
-.controls button{
-  position: absolute;
-  top: 0; bottom: 0;
-  margin: auto 0;
-  height: calc(var(--frame-gap) - 4px);
-  line-height: calc(var(--frame-gap) - 4px);
-  padding: 0 clamp(6px, 1.2vw, 14px);
-  background: transparent;
-  border: 0;
-  color: var(--stroke);
-  font-family: "TOLArial2", Arial, Helvetica, sans-serif;
-  font-weight: 700;
-  font-size: clamp(12px, calc(var(--frame-gap)*0.45), 20px);
-  white-space: nowrap;
-  pointer-events: auto;
-  cursor: pointer;
-}
-.btn-back  { right: calc(50% + var(--btn-gap)); }
-.btn-home  { left:  calc(50% + var(--btn-gap)); }
-.btn-theme { right: var(--frame-gap); }
-</style>
+  .tick-left{position:absolute; top:0; bottom:0; width:var(--frame-gap); left:calc(-1*var(--frame-gap))}
+  .tick-left::before{
+    content:""; position:absolute; top:0; bottom:0; left:0; width:var(--tick-l);
+    background:
+      linear-gradient(90deg,var(--stroke),var(--stroke)) 0 25%/100% var(--line-thin) no-repeat,
+      linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;
+  }
+  .tick-left::after{
+    content:""; position:absolute; top:50%; transform:translateY(-50%); left:0;
+    height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);
+  }
+
+  .tick-right{position:absolute; top:0; bottom:0; width:var(--frame-gap); right:calc(-1*var(--frame-gap))}
+  .tick-right::before{
+    content:""; position:absolute; top:0; bottom:0; right:0; width:var(--tick-l);
+    background:
+      linear-gradient(90deg,var(--stroke),var(--stroke)) 0 25%/100% var(--line-thin) no-repeat,
+      linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;
+  }
+  .tick-right::after{
+    content:""; position:absolute; top:50%; transform:translateY(-50%); right:0;
+    height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);
+  }
+
+  /* Logo bas-droite (dans la marge, aligné au bord droit du cadre) */
+  .frame-logo{
+    position:fixed;
+    right:var(--frame-gap);
+    bottom:var(--logo-bottom-offset);
+    height:min(var(--logo-target), calc(var(--frame-gap) - var(--logo-bottom-offset) - var(--logo-clear-frame)));
+    width:auto; object-fit:contain; opacity:.95;
+    z-index:1000; pointer-events:none;
+  }
+
+  /* === Boutons dans la marge haute (texte gris, grands, responsifs) === */
+  .controls{
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--frame-gap);
+    pointer-events: none;                  /* seule chaque touche capte les clics */
+    z-index: 1100;
+  }
+  .controls button{
+    position: absolute;
+    top: 0; bottom: 0; margin: auto 0;     /* centré verticalement dans la marge */
+    background: transparent; border: 0;
+    color: var(--stroke);
+    font-family:"TOLArial2", Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: var(--btn-font);            /* PLUS GRAND & responsive */
+    line-height: 1;
+    padding: 0 0.4em;                      /* un peu d’air */
+    white-space: nowrap; pointer-events: auto; cursor: pointer;
+  }
+  /* placement précis */
+  .btn-back  { right: calc(50% + var(--btn-gap)); }
+  .btn-home  { left:  calc(50% + var(--btn-gap)); }
+  .btn-theme { right: var(--frame-gap); }
+  </style>
 </head>
 <body>
 
-<!-- Boutons -->
-<div class="controls">
-  <button class="btn-back" onclick="history.back()">Retour</button>
-  <button class="btn-home" onclick="location.href='/'">Accueil</button>
-  <button class="btn-theme" onclick="toggleTheme()">Thème</button>
-</div>
+  <!-- Barre de contrôle (marge haute) -->
+  <div class="controls" aria-hidden="false">
+    <button class="btn-back"  type="button" onclick="goBack()"   aria-label="Retour">Retour</button>
+    <button class="btn-home"  type="button" onclick="location.href='/'" aria-label="Accueil">Accueil</button>
+    <button class="btn-theme" type="button" onclick="toggleTheme()" aria-label="Changer de thème">Thème</button>
+  </div>
 
-<!-- Cadre + ticks -->
-<div class="page-frame" aria-hidden="true">
-  <div class="tick-top"></div>
-  <div class="tick-bottom"></div>
-  <div class="tick-left"></div>
-  <div class="tick-right"></div>
-</div>
+  <!-- Cadre + repères -->
+  <div class="page-frame" aria-hidden="true">
+    <div class="tick-top"></div>
+    <div class="tick-bottom"></div>
+    <div class="tick-left"></div>
+    <div class="tick-right"></div>
+  </div>
 
-<!-- Logo -->
-<img class="frame-logo" src="/logo0.webp" alt="">
+  <!-- Logo bas-droite (toutes pages) -->
+  <img class="frame-logo" src="/assets/logo0.webp" alt="TOLExperience">
 
-<!-- Contenu -->
-<main class="container">
-{% block content %}{% endblock %}
-</main>
+  <!-- Contenus (toujours dans le cadre) -->
+  <main class="container">
+    {{ content | safe }}
+  </main>
 
-<script>
-function toggleTheme(){
-  document.documentElement.classList.toggle('dark');
-  localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-}
-(function(){
-  if(localStorage.getItem('theme') === 'dark'){
-    document.documentElement.classList.add('dark');
-  }
-})();
-</script>
-
+  <script>
+    function toggleTheme(){
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    }
+    (function(){
+      if(localStorage.getItem('theme') === 'dark'){
+        document.documentElement.classList.add('dark');
+      }
+    })();
+    function goBack(){
+      if (history.length > 1) history.back(); else location.href = '/';
+    }
+  </script>
 </body>
 </html>
+
 
