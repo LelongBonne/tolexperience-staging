@@ -12,14 +12,14 @@
   @font-face{font-family:"TOLArial4"; src:url("/assets/fonts/TOL-Arial4Light.otf")    format("opentype"); font-weight:300; font-style:normal; font-display:swap;}
   @font-face{font-family:"TOL-RV1";   src:url("/assets/fonts/TOLRV1.ttf")             format("truetype"); font-weight:400; font-style:normal; font-display:swap;}
 
-  /* === Couleurs de marque === */
+  /* === Couleurs de marque & variables === */
   :root{
     --brand-blue:#005e83;  /* RAL 5019 */
     --brand-red:#a63d2f;   /* RAL 3016 */
     --grey-dark:#383e42;   /* RAL 7016 */
     --grey-light:#c8c8c7;  /* RAL 7047 */
 
-    /* Thème clair par défaut */
+    /* Thème clair par défaut (les bleus/rouges ne changent jamais) */
     --bg:var(--grey-light);
     --text:var(--grey-dark);
     --stroke:var(--grey-dark);
@@ -36,22 +36,22 @@
     --tick-l:     min(var(--tick-base),     var(--frame-gap));
     --tick-l-mid: min(var(--tick-mid-base), calc(var(--frame-gap) + 10px));
 
-    /* Logo (bord droit aligné au cadre) */
+    /* Logo bas-droite (bord droit aligné au cadre) */
     --logo-target: 34px;
     --logo-bottom-offset: 2px; /* marge bord écran bas */
     --logo-clear-frame:  2px;  /* marge mini au-dessus du cadre bas */
 
-    /* Padding interne pour respirer dans le cadre */
+    /* Padding interne pour les contenus (tout reste à l’intérieur du cadre) */
     --content-pad: clamp(10px, 2vw, 24px);
 
     /* Boutons marge haute */
     --btn-h: 28px;
-    --btn-gap: 8px;
+    --btn-gap: 10px;
     --btn-pad-x: 12px;
     --btn-br: 999px;
   }
 
-  /* Thème sombre via classe .dark sur <html> (seuls les gris s’inversent) */
+  /* Thème sombre via classe .dark (seuls les gris s’inversent) */
   html.dark{
     --bg:#0e1012;
     --text:var(--grey-light);
@@ -69,7 +69,7 @@
     padding: calc(var(--frame-gap) + var(--content-pad)) var(--frame-gap) var(--frame-gap) var(--frame-gap);
   }
 
-  /* Liens : toujours bleu de marque (anti-jaunissement mobile) */
+  /* Liens : toujours bleu de marque (anti-jaune Android) */
   a,a:link,a:visited,a:active,a:hover,
   a[href^="mailto:"],a[href^="tel:"],a[x-apple-data-detectors]{
     color:var(--brand-blue) !important;
@@ -77,9 +77,9 @@
     text-decoration:underline;
   }
 
-  /* Typographies */
+  /* Typographies (selon tes consignes) */
   h1,h2,h3,.tol-title{
-    /* DEMANDE : ce qui était en TOLArial3 passe en TOLArial2 */
+    /* ce qui était TOLArial3 passe en TOLArial2 */
     font-family:"TOLArial2", Arial, Helvetica, sans-serif;
     font-size:16px; font-weight:700; color:var(--brand-blue);
     margin:0 0 8px 0;
@@ -98,10 +98,10 @@
   }
   html.dark p, html.dark li, html.dark td, html.dark th, html.dark .tol-text{ color:var(--grey-light); }
 
-  /* Notes (TOL-RV1) — deux cas seulement */
+  /* Notes (TOL-RV1) — deux états seulement */
   .tol-note{
     font-family:"TOL-RV1","Comic Sans MS","Segoe Script",cursive;
-    font-size:12px; color:var(--text); /* gris, s’inverse avec le thème */
+    font-size:12px; color:var(--text); /* gris (s’inverse avec thème) */
   }
   .tol-note.red{
     color:var(--brand-red);
@@ -111,8 +111,7 @@
     text-underline-offset: 2px;
   }
 
-  /* Zone de texte : même fond que la page, pas d’ombre.
-     Ajoute un cadre fin si tu veux border chaque bloc avec .card */
+  /* Conteneur & cartes (bord gris foncé, pas d’ombre, fond = bg) */
   .container{
     max-width: min(1100px, 100%);
     margin: 0 auto;
@@ -128,7 +127,7 @@
     background: var(--bg);
   }
 
-  /* Grille simple (accueil) */
+  /* Grille de l’accueil (réutilisable) */
   .grid{
     display: grid; gap: clamp(8px,2vw,18px);
     grid-template-columns: repeat(3, minmax(0,1fr));
@@ -136,7 +135,7 @@
   @media (max-width: 980px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
   @media (max-width: 580px){ .grid{ grid-template-columns: 1fr; } }
 
-  /* === Cadre global + séparations 25/50/75 === */
+  /* === Cadre + séparations 25/50/75 === */
   .page-frame{position:fixed; inset:var(--frame-gap); pointer-events:none; z-index:999;}
   .page-frame::before{content:""; position:absolute; inset:0; border:var(--border-w) solid var(--stroke); border-radius:2px}
 
@@ -189,7 +188,79 @@
     height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);
   }
 
-  /* Logo dans la marge bas-droite, bord droit aligné au cadre */
+  /* Logo bas-droite dans la marge — bord droit aligné sur le cadre */
   .frame-logo{
     position:fixed;
+    right:var(--frame-gap);
+    bottom:var(--logo-bottom-offset);
+    height:min(var(--logo-target), calc(var(--frame-gap) - var(--logo-bottom-offset) - var(--logo-clear-frame)));
+    width:auto; object-fit:contain; opacity:.95;
+    z-index:1000; pointer-events:none;
+  }
+
+  /* === Barre de contrôle dans la marge haute (retour / accueil / thème) === */
+  .controls{
+    position:fixed; top:0; left:0; right:0; height:var(--frame-gap);
+    pointer-events:none; z-index:1100;
+  }
+  .controls button{
+    position:absolute; top: calc((var(--frame-gap) - var(--btn-h))/2);
+    height: var(--btn-h); padding: 0 var(--btn-pad-x);
+    border: none; border-radius: var(--btn-br);
+    background: var(--brand-blue); color: #fff; cursor:pointer;
+    font-family:"TOLArial2", Arial, Helvetica, sans-serif;
+    font-size: 12px; pointer-events:auto;
+  }
+  /* — Ret. : bord droit un peu à gauche du centre */
+  .btn-back{ left:50%; transform: translateX(calc(-100% - var(--btn-gap))); }
+  /* — Accueil : bord gauche un peu à droite du centre */
+  .btn-home{ left:50%; transform: translateX(var(--btn-gap)); }
+  /* — Thème : bord droit aligné avec le bord droit du cadre */
+  .btn-theme{ right: var(--frame-gap); }
+
+  </style>
+</head>
+<body>
+
+  <!-- Boutons marge haute -->
+  <div class="controls" aria-hidden="false">
+    <button class="btn-back"  type="button" onclick="goBack()"   aria-label="Retour">Retour</button>
+    <button class="btn-home"  type="button" onclick="location.href='/'" aria-label="Accueil">Accueil</button>
+    <button class="btn-theme" type="button" onclick="toggleTheme()" aria-label="Changer de thème">Thème</button>
+  </div>
+
+  <!-- Cadre + séparations -->
+  <div class="page-frame" aria-hidden="true">
+    <div class="tick-top"></div>
+    <div class="tick-bottom"></div>
+    <div class="tick-left"></div>
+    <div class="tick-right"></div>
+  </div>
+
+  <!-- Logo bas-droite (pense à déposer /assets/logo0.webp) -->
+  <img class="frame-logo" src="/assets/logo0.webp" alt="TOLExperience">
+
+  <!-- Contenu de page (toujours à l’intérieur du cadre) -->
+  <main class="container">
+    {% block hero %}{% endblock %}
+    {% block content %}{{ content | safe }}{% endblock %}
+  </main>
+
+  <script>
+    function toggleTheme(){
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    }
+    (function(){
+      if(localStorage.getItem('theme') === 'dark'){
+        document.documentElement.classList.add('dark');
+      }
+    })();
+    function goBack(){
+      if (history.length > 1) history.back();
+      else location.href = '/';
+    }
+  </script>
+</body>
+</html>
 
