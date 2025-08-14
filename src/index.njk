@@ -3,59 +3,46 @@ title: "Accueil — TOLExperience (staging)"
 layout: "layouts/base.njk"
 ---
 
-<style>
-  /* Grille d’accueil : 3 colonnes → 2 → 1, sans débordement du cadre */
-  .home-grid{
-    display:grid;
-    grid-template-columns: repeat(3, minmax(0,1fr));
-    gap: clamp(12px, 2vw, 20px);
-    margin-top: clamp(10px, 2vw, 18px);
-  }
-  @media (max-width: 980px){
-    .home-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-  }
-  @media (max-width: 580px){
-    .home-grid{ grid-template-columns: 1fr; }
-  }
-  /* on neutralise les marges par défaut des titres dans les panneaux,
-     car la classe .panel gère déjà les espacements internes */
-  .panel > h3, .panel > h4 { margin: 0 0 6px 0; }
-  .panel > p  { margin: 6px 0 0 0; }
-  .home-logo-hero{
-    display:block;
-    margin: 0 auto clamp(10px, 2.4vw, 24px);
-    height: clamp(60px, 12vw, 140px);
-    width:auto; object-fit:contain;
-  }
-</style>
+{% block hero %}
+  <style>
+    /* Styles spécifiques à l’accueil */
+    .home-hero{
+      display:flex; justify-content:center; margin: 0 0 clamp(10px,2vw,18px) 0;
+    }
+    .home-hero img{
+      height: clamp(42px, 7vw, 80px); width:auto; object-fit:contain;
+    }
+  </style>
+  <div class="home-hero" aria-hidden="true">
+    <!-- Pense à déposer /assets/logo1.webp -->
+    <img src="/assets/logo1.webp" alt="TOLExperience">
+  </div>
+{% endblock %}
 
-<!-- Logo d’accueil centré en haut (en plus du logo0 en bas-droite) -->
-<img class="home-logo-hero" src="/assets/logo1.webp" alt="TOLExperience">
+{% block content %}
 
-<!-- Titre principal (TOLArial2, bleu ; L rouge) -->
 <h1 class="tol-title">
   <span class="L">L</span>e savoir-faire industriel au service de l’éducation et de la performance
 </h1>
 
-<section class="home-grid">
-  <div class="panel">
-    <h3 class="tol-subtitle">Vidéos</h3>
+<section class="grid">
+  <div class="card">
+    <h3 class="tol-title">Vidéos</h3>
     <p class="tol-text">Tutoriels, démonstrations, retours d’expérience.</p>
     <p class="tol-text"><a href="/videos/">Voir la page vidéos →</a></p>
   </div>
 
-  <div class="panel">
-    <h3 class="tol-subtitle">Cours</h3>
+  <div class="card">
+    <h3 class="tol-title">Cours</h3>
     <p class="tol-text">Cours structurés (Pro / CAP / Bac Pro), consultation en ligne et PDF.</p>
     <p class="tol-text"><a href="/cours/">Explorer les cours →</a></p>
   </div>
 
-  <div class="panel">
-    <h3 class="tol-subtitle">Téléchargements</h3>
+  <div class="card">
+    <h3 class="tol-title">Téléchargements</h3>
     <p class="tol-text">PDF complets et fichiers SolidWorks à la demande.</p>
     <p class="tol-text"><a href="/telechargements/">Accéder à la bibliothèque →</a></p>
   </div>
 </section>
-nts/">Accéder à la bibliothèque →</a></p>
-  </div>
-</section>
+
+{% endblock %}
