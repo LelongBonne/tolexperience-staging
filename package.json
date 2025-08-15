@@ -2,9 +2,12 @@
   "name": "tolexperience-staging",
   "private": true,
   "scripts": {
-    "build": "npx @11ty/eleventy",
-    "dev": "npx @11ty/eleventy --serve"
-  },
+  "dev": "eleventy --serve --input=src --output=_site",
+  "build": "eleventy --input=src --output=_site",
+  "check:links": "linkinator http://localhost:8080 --recurse --skip \"mailto:,tel:\"",
+  "check:links:json": "linkinator http://localhost:8080 --recurse --skip \"mailto:,tel:\" --format JSON --output link-report.json"
+},
+
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1"
   }
