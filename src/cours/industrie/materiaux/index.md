@@ -1,6 +1,7 @@
 ---
 title: "Matériaux — Cours (staging)"
 layout: "layouts/course.njk"
+tags: ["industrie"]
 intro: "Aperçu en ligne + téléchargement."
 ---
 
@@ -20,4 +21,3 @@ intro: "Aperçu en ligne + téléchargement."
 <noscript>
   <p>Le lecteur intégré nécessite JavaScript. Vous pouvez <a href="{{ '/assets/docs/materiaux.pdf' | url }}">ouvrir le PDF</a>.</p>
 </noscript>
-
