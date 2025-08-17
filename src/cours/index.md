@@ -2,6 +2,7 @@
 title: "Cours — TOLExperience (staging)"
 layout: "layouts/base.njk"
 ---
+
 # Cours
 
 <section class="grid">

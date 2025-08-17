@@ -57,10 +57,10 @@
     color:var(--text);
     font-family:"TOLArial4", Arial, Helvetica, sans-serif;
     font-size:16px; line-height:1.55;
-    /* pas de gros padding : la zone scrollable gère les espacements */
     padding: 0;
     min-height: 100dvh;
-    overflow: hidden; /* ⬅ on enlève le scroll de la page */
+    overflow: hidden; /* on enlève le scroll de la page, la zone .viewport défile */
+    -webkit-touch-callout:none;
   }
 
   /* Liens : bleu marque (anti-jaune Android) */
@@ -71,27 +71,45 @@
     text-decoration:underline;
   }
 
-  /* Typo */
+  /* === TYPO FLUIDE (garde les tailles max d’origine) === */
+  p,li,td,th,.tol-text{
+    font-family:"TOLArial4";
+    font-size:clamp(15px, 0.65vw + 12px, 18px);
+    color:var(--text);
+    margin:0 0 .7em 0;
+  }
   h1,h2,h3,.tol-title{
     font-family:"TOLArial2", Arial, Helvetica, sans-serif;
-    font-size:32px; font-weight:700; color:var(--brand-blue);
+    font-weight:700;
+    font-size:clamp(20px, 1vw + 14px, 24px);
+    color:var(--grey-dark);
     margin:0 0 12px 0;
   }
+  h4,.tol-subtitle{ font-family:"TOLArial2"; font-size:clamp(20px, 1vw + 14px, 24px); color:var(--text); margin:8px 0 10px; }
+  .tol-note{ font-family:"TOL-RV1","Comic Sans MS","Segoe Script",cursive; font-size:clamp(15px, 0.65vw + 12px, 18px); color:var(--text); }
+  .tol-note.red{ color:var(--brand-red); font-weight:700; text-decoration: underline dotted var(--stroke); text-decoration-thickness: 3px; text-underline-offset: 3px; }
   .L{ color:var(--brand-red) !important; -webkit-text-fill-color:var(--brand-red) !important; }
-  h4,.tol-subtitle{ font-family:"TOLArial2"; font-size:24px; color:var(--text); margin:8px 0 10px; }
-  p,li,td,th,.tol-text{ font-family:"TOLArial4"; font-size:18px; color:var(--text); margin:0 0 .7em 0; }
 
-  .tol-note{ font-family:"TOL-RV1","Comic Sans MS","Segoe Script",cursive; font-size:18px; color:var(--text); }
-  .tol-note.red{
-    color:var(--brand-red); font-weight:700;
-    text-decoration: underline dotted var(--stroke);
-    text-decoration-thickness: 3px; text-underline-offset: 3px;
+  /* === Protection "douce" par défaut sur TOUTES les images === */
+  img{
+    -webkit-user-drag:none;
+    user-select:none;
+    pointer-events:none;   /* empêche clic droit/drag natif */
+  }
+  /* Sauf si on autorise explicitement : <img data-allow> */
+  img[data-allow]{ pointer-events:auto; }
+
+  /* Utilitaire pour tout élément à protéger (logos, etc.) */
+  .no-save{
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-drag:none;
+    -webkit-touch-callout:none;
   }
 
   /* === ZONE SCROLLABLE À L’INTÉRIEUR DU CADRE === */
   .viewport{
     position: fixed;
-    /* bords intérieurs du cadre */
     top:    calc(var(--frame-gap));
     right:  calc(var(--frame-gap));
     bottom: calc(var(--frame-gap));
@@ -99,13 +117,11 @@
     overflow: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    z-index: 100; /* sous le cadre (z=999) */
-    /* respirations afin que le texte reste à l’intérieur du cadre */
+    z-index: 100;
     padding: var(--content-pad);
     background: var(--bg);
   }
 
-  /* Conteneur interne (utile si tu veux des .section) */
   .container{
     max-width:min(1100px, 100%);
     margin: 0 auto;
@@ -119,9 +135,14 @@
   }
   @media (max-width: 980px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
   @media (max-width: 620px){ .grid{ grid-template-columns: 1fr; } }
-  .card{ border:2px solid var(--stroke); padding: clamp(12px, 2vw, 20px); background: var(--bg); }
 
-  /* === Cadre + repères 25/50/75 === */
+  .card{
+    border:2px solid var(--stroke);
+    padding: clamp(12px, 2vw, 20px);
+    background: var(--bg);
+  }
+
+  /* === Cadre + repères === */
   .page-frame{position:fixed; inset:var(--frame-gap); pointer-events:none; z-index:999;}
   .page-frame::before{content:""; position:absolute; inset:0; border:var(--border-w) solid var(--stroke); border-radius:2px}
   .tick-top{position:absolute; left:0; right:0; height:var(--frame-gap); top:calc(-1*var(--frame-gap))}
@@ -145,14 +166,14 @@
                linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;}
   .tick-right::after{content:""; position:absolute; top:50%; transform:translateY(-50%); right:0; height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);}
 
-  /* Logo bas-droite */
+  /* Logo bas-droite (logo0) */
   .frame-logo{
     position:fixed;
     right:var(--frame-gap);
     bottom:var(--logo-bottom-offset);
     height:min(var(--logo-target), calc(var(--frame-gap) - var(--logo-bottom-offset) - var(--logo-clear-frame)));
     width:auto; object-fit:contain; opacity:.95;
-    z-index:1000; pointer-events:none;
+    z-index:1000;
   }
 
   /* Boutons dans la marge haute */
@@ -194,10 +215,10 @@
     <div class="tick-right"></div>
   </div>
 
-
-  <!-- Logo -->
-  <img class="frame-logo" src="{{ '/assets/logo0.webp' | url }}" alt="TOLExperience">
-
+  <!-- Logo bas-droite : protégé -->
+  <img class="frame-logo no-save"
+       src="{{ '/assets/logo0.webp' | url }}" alt="TOLExperience"
+       draggable="false" oncontextmenu="return false">
 
   <!-- ⬇ Zone scrollable interne au cadre -->
   <div class="viewport">
@@ -213,6 +234,16 @@
     }
     (function(){ if(localStorage.getItem('theme') === 'dark'){ document.documentElement.classList.add('dark'); }})();
     function goBack(){ if (history.length > 1) history.back(); else location.href = '/'; }
+
+    /* Bloque clic droit + drag sur .no-save et sur <img> non autorisées */
+    document.addEventListener('contextmenu', (e) => {
+      const el = e.target.closest('img, .no-save');
+      if (el && !el.matches('[data-allow]')) e.preventDefault();
+    }, {capture:true});
+    document.addEventListener('dragstart', (e) => {
+      const el = e.target.closest('img, .no-save');
+      if (el && !el.matches('[data-allow]')) e.preventDefault();
+    }, {capture:true});
   </script>
 </body>
 </html>
