@@ -2,7 +2,7 @@ name: Build & Deploy (11ty → GitHub Pages)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ staging-fix ]
   workflow_dispatch:
 
 permissions:
