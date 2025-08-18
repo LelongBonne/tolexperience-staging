@@ -1,44 +1,51 @@
 ---
 title: "Accueil — TOLExperience (staging)"
+layout: layouts/base.njk
 ---
 
-<style>
-  .home-hero{
-    display:flex; justify-content:center; margin: 0 0 clamp(12px,2.4vw,24px);
-  }
-  .home-hero img{
-    height: clamp(64px, 12vw, 150px); width:auto; object-fit:contain;
-  }
-</style>
-
-<div class="section">
-  <!-- Logo1 centré en haut (accueil) -->
+<div class="section section--full">
+  <!-- Logo centré -->
   <div class="home-hero" aria-hidden="true">
-      <img src="{{ '/assets/logo1.webp' | url }}" alt="TOLExperience" />
-
+    <img src="/assets/logo1.webp" alt="TOLExperience" />
   </div>
 
-  <h1 class="tol-note" style="text-align:center;">
-  Éprouver vos conceptions et prouver votre compétitivité
-  </h1>
+  <!-- Slogan -->
+  <h3 class="tol-note" style="text-align:center;">
+    Éprouver vos conceptions et prouver votre compétitivité
+  </h3>
 
-  <section class="grid">
+  <!-- Grille d’accès : .grid garde tes marges ; .grid--home gère colonnes/tailles -->
+  <section class="grid grid--home">
     <div class="card">
-      <h3 class="tol-title">Vidéos</h3>
-      <p class="tol-text">Tutoriels, démonstrations, retours d’expérience.</p>
-      <p class="tol-text"><a href="/videos/">Voir la page vidéos →</a></p>
+      <div class="card-body">
+        <h3 class="tol-title">À propos</h3>
+        <p class="tol-text">Qui je suis, ce que je fais, ma méthode et mes références.</p>
+        <p class="tol-text"><a href="/apropos/">En savoir plus →</a></p>
+      </div>
     </div>
 
     <div class="card">
-      <h3 class="tol-title">Cours</h3>
-      <p class="tol-text">Cours structurés (Pro / CAP / Bac Pro), consultation en ligne et PDF.</p>
-      <p class="tol-text"><a href="/cours/">Explorer les cours →</a></p>
+      <div class="card-body">
+        <h3 class="tol-title">Vidéos</h3>
+        <p class="tol-text">Sélection de vidéos techniques et démonstrations.</p>
+        <p class="tol-text"><a href="/videos/">Voir les vidéos →</a></p>
+      </div>
     </div>
 
     <div class="card">
-      <h3 class="tol-title">Téléchargements</h3>
-      <p class="tol-text">PDF complets et fichiers SolidWorks à la demande.</p>
-      <p class="tol-text"><a href="/telechargements/">Accéder à la bibliothèque →</a></p>
+      <div class="card-body">
+        <h3 class="tol-title">Cours</h3>
+        <p class="tol-text">Cours structurés (Pro / CAP / Bac Pro), consultation en ligne et PDF.</p>
+        <p class="tol-text"><a href="/cours/">Explorer les cours →</a></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h3 class="tol-title">Téléchargements</h3>
+        <p class="tol-text">PDF complets et fichiers SolidWorks à la demande.</p>
+        <p class="tol-text"><a href="/telechargements/">Accéder à la bibliothèque →</a></p>
+      </div>
     </div>
   </section>
 </div>
