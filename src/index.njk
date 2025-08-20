@@ -1,44 +1,120 @@
 ---
 title: "Accueil — TOLExperience (staging)"
+layout: layouts/base.njk
 ---
 
-<style>
-  .home-hero{
-    display:flex; justify-content:center; margin: 0 0 clamp(12px,2.4vw,24px);
-  }
-  .home-hero img{
-    height: clamp(64px, 12vw, 150px); width:auto; object-fit:contain;
-  }
-</style>
-
-<div class="section">
-  <!-- Logo1 centré en haut (accueil) -->
-  <div class="home-hero" aria-hidden="true">
-      <img src="{{ '/assets/logo1.webp' | url }}" alt="TOLExperience" />
-
+<div class="section section--full">
+  <!-- Bloc logo + slogans avec image de fond -->
+  <div class="hero-banner">
+    <div class="hero-stack">
+      <img id="hero-logo" class="logo" src="/assets/logo1.webp" alt="TOLExperience" />
+      <div class="slogans" id="slogans">
+        <h3 class="tol-note slogan-left" style="color:#383e42;">Éprouver vos conceptions</h3>
+        <h3 class="tol-note slogan-right" style="color:#383e42;">…et prouver votre compétitivité</h3>
+      </div>
+    </div>
   </div>
 
-  <h1 class="tol-note" style="text-align:center;">
-  Éprouver vos conceptions et prouver votre compétitivité
-  </h1>
-
-  <section class="grid">
+  <!-- Grille d’accès : .grid garde tes marges ; .grid--home gère colonnes/tailles -->
+  <section class="grid grid--home">
     <div class="card">
-      <h3 class="tol-title">Vidéos</h3>
-      <p class="tol-text">Tutoriels, démonstrations, retours d’expérience.</p>
-      <p class="tol-text"><a href="/videos/">Voir la page vidéos →</a></p>
+      <div class="card-body">
+        <h3 class="tol-title">À propos</h3>
+        <p class="tol-text">Qui je suis, ce que je fais, ma méthode et mes références.</p>
+        <p class="tol-text"><a href="/apropos/">En savoir plus →</a></p>
+      </div>
     </div>
 
     <div class="card">
-      <h3 class="tol-title">Cours</h3>
-      <p class="tol-text">Cours structurés (Pro / CAP / Bac Pro), consultation en ligne et PDF.</p>
-      <p class="tol-text"><a href="/cours/">Explorer les cours →</a></p>
+      <div class="card-body">
+        <h3 class="tol-title">Vidéos</h3>
+        <p class="tol-text">Sélection de vidéos techniques et démonstrations.</p>
+        <p class="tol-text"><a href="/videos/">Voir les vidéos →</a></p>
+      </div>
     </div>
 
     <div class="card">
-      <h3 class="tol-title">Téléchargements</h3>
-      <p class="tol-text">PDF complets et fichiers SolidWorks à la demande.</p>
-      <p class="tol-text"><a href="/telechargements/">Accéder à la bibliothèque →</a></p>
+      <div class="card-body">
+        <h3 class="tol-title">Cours</h3>
+        <p class="tol-text">Cours structurés (Pro / CAP / Bac Pro), consultation en ligne et PDF.</p>
+        <p class="tol-text"><a href="/cours/">Explorer les cours →</a></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h3 class="tol-title">Téléchargements</h3>
+        <p class="tol-text">PDF complets et fichiers SolidWorks à la demande.</p>
+        <p class="tol-text"><a href="/telechargements/">Accéder à la bibliothèque →</a></p>
+      </div>
     </div>
   </section>
 </div>
+
+<style>
+.hero-banner {
+  text-align: center;
+  margin-bottom: clamp(16px,3vw,32px);
+  background: url("/assets/background.jpg") center/cover no-repeat;
+  padding-top: clamp(12px,2vw,24px);
+  padding-bottom: clamp(16px,3vw,32px);
+}
+
+.hero-stack {
+  display: inline-block;
+  text-align: center;
+}
+
+.logo {
+  display: block;
+  height: clamp(72px, 12vw, 150px);
+  width: auto;
+  margin: 0 auto 8px;
+}
+
+.slogans {
+  margin: 0 auto;
+  white-space: nowrap;
+  max-width: var(--logo-width, 600px);
+}
+
+.slogan-left,
+.slogan-right {
+  margin: 4px 0;
+  line-height: 1.2;
+  font-family: "TOL-RV1", cursive;
+  font-size: var(--slogan-size, 24px);
+  color: #383e42; /* gris foncé fixe */
+}
+
+.slogan-left  { text-align: left; }
+.slogan-right { text-align: right; }
+</style>
+
+<script>
+function adjustSloganSize() {
+  const logo = document.getElementById("hero-logo");
+  const slogans = document.getElementById("slogans");
+  if (!logo || !slogans) return;
+
+  const logoWidth = logo.offsetWidth;
+  document.documentElement.style.setProperty("--logo-width", logoWidth + "px");
+
+  let fontSize = 40;   // taille max
+  const minSize = 10;  // taille mini forcée
+  slogans.style.setProperty("--slogan-size", fontSize + "px");
+
+  const lines = slogans.querySelectorAll("h3");
+  while (fontSize > minSize) {
+    let tooWide = false;
+    lines.forEach(line => {
+      if (line.scrollWidth > logoWidth) tooWide = true;
+    });
+    if (!tooWide) break;
+    fontSize -= 1;
+    slogans.style.setProperty("--slogan-size", fontSize + "px");
+  }
+}
+window.addEventListener("load", adjustSloganSize);
+window.addEventListener("resize", adjustSloganSize);
+</script>

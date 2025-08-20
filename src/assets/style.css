@@ -1,0 +1,299 @@
+/* ===============================================
+   TOLExperience — styles globaux (palette officielle)
+   =============================================== */
+
+/* ---------- Variables (couleurs & mesures) ---------- */
+:root{
+  /* Couleurs marque (officielles) */
+  --brand-red:  #a63d2f;  /* rouge */
+  --brand-blue: #005e83;  /* bleu */
+
+  /* Palette officielle */
+  --gray-dark:  #383e42;  /* gris foncé */
+  --gray-light: #c8c8c7;  /* gris clair */
+  --white:      #f8f8f8;  /* blanc */
+  --black:      #111111;  /* noir */
+
+  /* Alias utilisés dans le CSS global */
+  --bg-color:   var(--white);
+  --text-color: var(--black);
+
+  /* Gris utilitaires (mappés sur la palette officielle) */
+  --gray-300: var(--gray-light);
+  --gray-500: var(--gray-dark);
+  --gray-700: var(--black); /* hover scrollbars */
+
+  /* Layout */
+  --section-max-w: 1200px;
+  --gap: 16px;
+
+  /* Cards */
+  --card-h: 160px;   /* hauteur minimale par défaut */
+  --card-min: 360px; /* largeur mini confortable */
+}
+
+/* Mode sombre : on inverse fond/texte et on ajuste les gris */
+@media (prefers-color-scheme: dark) {
+  :root{
+    --bg-color:   var(--black);
+    --text-color: var(--white);
+    --gray-300: var(--gray-dark);  /* track plus sombre */
+    --gray-500: var(--gray-light); /* thumb plus clair */
+    --gray-700: var(--white);
+  }
+}
+
+/* ---------- Polices (chargées globalement) ---------- */
+@font-face{
+  font-family:"TOLArial3";
+  src:url("/assets/fonts/TOL-Arial3Gras-SVG.otf") format("opentype");
+  font-weight:700; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"TOLArial2";
+  src:url("/assets/fonts/TOL-Arial2Gras-SVG.otf") format("opentype");
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"TOLArial4";
+  src:url("/assets/fonts/TOL-Arial4Light.otf") format("opentype");
+  font-weight:300; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"TOL-RV1";
+  src:url("/assets/fonts/TOLRV1.ttf") format("truetype");
+  font-weight:400; font-style:normal; font-display:swap;
+}
+
+/* ---------- Reset léger & base ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--text-color);
+  background: var(--bg-color);
+  font-family:"TOLArial4", Arial, Helvetica, sans-serif;
+  font-size:16px; line-height:1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Liens */
+a { color: var(--brand-blue); text-decoration: underline; }
+
+/* ---------- Titres & textes ---------- */
+/* Titres par défaut */
+h1, h2, h3 {
+  font-family: "TOLArial2", system-ui, Arial, sans-serif;
+  font-weight: 700;
+  margin: 0 0 .5em 0;
+  color: var(--text-color);
+}
+h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.2; }
+h2 { font-size: clamp(1.4rem, 3.2vw, 1.9rem); line-height: 1.3; }
+h3 { font-size: clamp(1.2rem, 2.6vw, 1.5rem); line-height: 1.4; }
+
+/* Titre “classique” : TOLArial2, gris foncé */
+.tol-title {
+  font-family: "TOLArial2", system-ui, Arial, sans-serif;
+  color: var(--gray-500); /* #383e42 */
+  font-weight: 400;
+  margin: 0 0 .3rem 0;
+}
+
+/* Titre branding : TOLArial3 bleu, L majuscule rouge via <span class="red-L"> */
+.tol-btitle {
+  font-family: "TOLArial3", system-ui, Arial, sans-serif;
+  font-weight: 700;
+  color: var(--brand-blue);
+  margin: 0 0 .3rem 0;
+}
+.tol-btitle .red-L { color: var(--brand-red); }
+
+/* Corps de texte */
+.tol-text {
+  font-family: "TOLArial4", system-ui, Arial, sans-serif;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Slogan manuscrit, non gras */
+.tol-note {
+  font-family: "TOL-RV1", "TOL-RV1", ui-rounded, system-ui, sans-serif;
+  font-weight: normal;
+}
+
+/* ---------- Sections & conteneurs ---------- */
+.section { max-width: var(--section-max-w); margin: 0 auto; padding: clamp(12px, 2.2vw, 24px); }
+.section--full { max-width: 100%; }
+
+/* Logo d'accueil */
+.home-hero{
+  display:flex; justify-content:center; margin: 0 0 clamp(12px,2.4vw,24px);
+}
+.home-hero img{
+  height: clamp(64px, 12vw, 150px); width:auto; object-fit:contain;
+}
+
+/* ---------- Grille ---------- */
+.grid { display: grid; gap: var(--gap); }
+.grid--home{ grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min)), 1fr)); }
+
+/* ---------- Cartes (hauteur adaptative) ---------- */
+.card{
+  border: 1px solid var(--gray-300);
+  border-radius: 10px;
+  background: transparent; /* passer à var(--white) si tu veux un fond clair */
+  padding: 0; /* padding porté par .card-body */
+}
+
+.card-body {
+  padding: 1.5rem; /* tu peux augmenter l'espace entre le texte et la carte*/
+  display: flex;
+  flex-direction: column;
+  gap: .6rem; /* tu peux aussi augmenter l’écart entre lignes */
+  min-height: 0;
+}
+
+.grid--home .card{
+  min-height: var(--card-h);
+  height: auto; /* s’adapte au contenu si plus petit */
+  display: flex;
+  flex-direction: column;
+}
+.grid--home .card h3{ margin: 0 0 .3rem 0; }
+.grid--home .card p{
+  margin: 0;
+  line-height: 1.3;
+  overflow-wrap: anywhere; /* évite débordements sur petits écrans */
+}
+
+/* ---------- Responsive (1 colonne) ---------- */
+@media (max-width: 760px){
+  .grid--home { grid-template-columns: 1fr; }
+  :root{ --card-h: 140px; }
+  .grid--home .card h3 {
+    font-size: clamp(1rem, 3.8vw, 1.1rem);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  .grid--home .card p {
+    font-size: clamp(0.9rem, 3.2vw, 1rem);
+    line-height: 1.25;
+  }
+  .card-body { gap: .5rem; }
+}
+
+/* ---------- Ascenseurs (scrollbars) ---------- */
+/* Objectif :
+   - la piste (track) = même couleur que le fond d'écran
+   - le pouce (thumb) + boutons = couleur opposée (contraste)
+*/
+
+/* Chrome, Edge, Safari, Opera (WebKit) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+/* Piste = fond de page */
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+/* Pouce = couleur de texte (opposé du fond) */
+::-webkit-scrollbar-thumb {
+  background-color: var(--text-color);
+  border-radius: 6px;
+  /* “padding” visuel du pouce : bord de la couleur du fond */
+  border: 3px solid var(--bg-color);
+}
+
+/* Survol : léger adoucissement (si color-mix non supporté, tombe sur text-color) */
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in oklab, var(--text-color) 85%, var(--bg-color) 15%);
+}
+
+/* Boutons (flèches) — selon navigateur ils peuvent ne pas s'afficher */
+::-webkit-scrollbar-button {
+  background: var(--text-color);
+  border: 2px solid var(--bg-color);
+}
+
+/* Firefox */
+* {
+  /* thumb track */
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-color) var(--bg-color);
+}
+
+/* === Vidéos === */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+.video-card {
+  margin: 0;
+}
+
+/* === Vidéo === */
+.video-frame {
+  position: relative;
+  padding-top: 56.25%; /* ratio 16:9 */
+  background: var(--gray-300);        /* foncé en clair, clair en sombre */
+  border: 1px solid var(--gray-500);  /* clair en clair, foncé en sombre */
+  border-radius: 8px;
+  overflow: hidden;
+}
+.video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* === PDF viewer embed === */
+.pdf-wrapper{
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  height: 70vh;
+  border: 1px solid var(--gray-500);  /* suit le thème automatiquement */
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pdf-wrapper .pdf-embed{
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.pdf-actions{ margin-top: 10px; }
+
+
+/* === Override thème manuel via classe .dark (bouton Thème) === */
+html.dark {
+  --bg-color:   var(--black);
+  --text-color: var(--white);
+
+  /* scrollbars & traits */
+  --gray-300: var(--gray-dark);   /* piste plus sombre */
+  --gray-500: var(--gray-light);  /* pouce plus clair pour le contraste */
+  --gray-700: var(--white);
+}
+
+/* === Override thème manuel via classe .light (bouton Thème) === */
+/* Permet de forcer le clair même si l’OS est en sombre */
+html.light {
+  --bg-color:   var(--white);
+  --text-color: var(--black);
+
+  --gray-300: var(--gray-light);
+  --gray-500: var(--gray-dark);
+  --gray-700: var(--black);
+}

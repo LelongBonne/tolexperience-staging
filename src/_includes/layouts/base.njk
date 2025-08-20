@@ -5,115 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ title | default("TOLExperience") }}</title>
 
+  <!-- CSS global (palette, polices, grilles, cartes, tol-*, scrollbars) -->
+  <link rel="stylesheet" href="/assets/style.css">
+
   <style>
-  /* === Polices TOL === */
-  @font-face{font-family:"TOLArial3"; src:url("/assets/fonts/TOL-Arial3Gras-SVG.otf") format("opentype"); font-weight:700; font-style:normal; font-display:swap;}
-  @font-face{font-family:"TOLArial2"; src:url("/assets/fonts/TOL-Arial2Gras-SVG.otf") format("opentype"); font-weight:400; font-style:normal; font-display:swap;}
-  @font-face{font-family:"TOLArial4"; src:url("/assets/fonts/TOL-Arial4Light.otf")    format("opentype"); font-weight:300; font-style:normal; font-display:swap;}
-  @font-face{font-family:"TOL-RV1";   src:url("/assets/fonts/TOLRV1.ttf")             format("truetype"); font-weight:400; font-style:normal; font-display:swap;}
-
-  /* === Couleurs & variables === */
+  /* === Variables spécifiques AU CADRE (mappées sur la palette globale) === */
   :root{
-    --brand-blue:#005e83;
-    --brand-red:#a63d2f;
-    --grey-dark:#383e42;
-    --grey-light:#c8c8c7;
+    /* recycle les variables de /assets/style.css */
+    --bg:    var(--bg-color);
+    --text:  var(--text-color);
+    --stroke:var(--gray-500);
 
-    --bg:var(--grey-light);
-    --text:var(--grey-dark);
-    --stroke:var(--grey-dark);
-
+    /* Gabarit du cadre */
     --frame-gap: clamp(12px, 1.2vw + 8px, 1cm);
     --border-w:3px;
     --line-thin:1px;
     --line-center:2px;
 
+    /* Taquets repères */
     --tick-base:7mm;
     --tick-mid-base:9mm;
     --tick-l:     min(var(--tick-base),     var(--frame-gap));
     --tick-l-mid: min(var(--tick-mid-base), calc(var(--frame-gap) + 10px));
 
+    /* Logo fixe bas-droite */
     --logo-target: 34px;
     --logo-bottom-offset: 2px;
     --logo-clear-frame:  2px;
 
+    /* Padding intérieur de la zone scrollable */
     --content-pad: clamp(12px, 2.2vw, 28px);
 
+    /* Boutons haut */
     --btn-gap: clamp(6px, 1vw, 14px);
     --btn-font: clamp(14px, calc(var(--frame-gap)*0.90), 34px);
   }
 
-  html.dark{
-    --bg:#0e1012;
-    --text:var(--grey-light);
-    --stroke:var(--grey-light);
-  }
-
-  /* === Base === */
-  *,*::before,*::after{ box-sizing:border-box; }
   html,body{height:100%; margin:0; -webkit-text-size-adjust:100%;}
   body{
     background:var(--bg);
     color:var(--text);
     font-family:"TOLArial4", Arial, Helvetica, sans-serif;
     font-size:16px; line-height:1.55;
-    padding: 0;
     min-height: 100dvh;
-    overflow: hidden; /* on enlève le scroll de la page, la zone .viewport défile */
+    padding: 0;
+    overflow: hidden; /* pas de scroll page ; le scroll se fait dans .viewport */
     -webkit-touch-callout:none;
   }
+  *,*::before,*::after{ box-sizing:border-box; }
 
-  /* Liens : bleu marque (anti-jaune Android) */
-  a,a:link,a:visited,a:active,a:hover,
-  a[href^="mailto:"],a[href^="tel:"],a[x-apple-data-detectors]{
-    color:var(--brand-blue) !important;
-    -webkit-text-fill-color:var(--brand-blue) !important;
-    text-decoration:underline;
-  }
-
-  /* === TYPO FLUIDE (garde les tailles max d’origine) === */
-  p,li,td,th,.tol-text{
-    font-family:"TOLArial4";
-    font-size:clamp(15px, 0.65vw + 12px, 18px);
-    color:var(--text);
-    margin:0 0 .7em 0;
-  }
-  h1,h2,h3,.tol-title{
-    font-family:"TOLArial2", Arial, Helvetica, sans-serif;
-    font-weight:700;
-    font-size:clamp(20px, 1vw + 14px, 24px);
-    color:var(--grey-dark);
-    margin:0 0 12px 0;
-  }
-  h4,.tol-subtitle{ font-family:"TOLArial2"; font-size:clamp(20px, 1vw + 14px, 24px); color:var(--text); margin:8px 0 10px; }
-  .tol-note{ font-family:"TOL-RV1","Comic Sans MS","Segoe Script",cursive; font-size:clamp(15px, 0.65vw + 12px, 18px); color:var(--text); }
-  .tol-note.red{ color:var(--brand-red); font-weight:700; text-decoration: underline dotted var(--stroke); text-decoration-thickness: 3px; text-underline-offset: 3px; }
-  .L{ color:var(--brand-red) !important; -webkit-text-fill-color:var(--brand-red) !important; }
-
-  /* === Protection "douce" par défaut sur TOUTES les images === */
-  img{
-    -webkit-user-drag:none;
-    user-select:none;
-    pointer-events:none;   /* empêche clic droit/drag natif */
-  }
-  /* Sauf si on autorise explicitement : <img data-allow> */
-  img[data-allow]{ pointer-events:auto; }
-
-  /* Utilitaire pour tout élément à protéger (logos, etc.) */
-  .no-save{
-    pointer-events:none;
-    user-select:none;
-    -webkit-user-drag:none;
-    -webkit-touch-callout:none;
-  }
-
-  /* === ZONE SCROLLABLE À L’INTÉRIEUR DU CADRE === */
+  /* === Zone scrollable intérieure au cadre === */
   .viewport{
     position: fixed;
-    top:    calc(var(--frame-gap));
-    right:  calc(var(--frame-gap));
-    bottom: calc(var(--frame-gap));
-    left:   calc(var(--frame-gap));
+    top:    var(--frame-gap);
+    right:  var(--frame-gap);
+    bottom: var(--frame-gap);
+    left:   var(--frame-gap);
     overflow: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
@@ -122,27 +69,15 @@
     background: var(--bg);
   }
 
+  /* ⬇⬇⬇ élargi : pleine largeur */
   .container{
-    max-width:min(1100px, 100%);
+    max-width: 100%;
+    width: 100%;
     margin: 0 auto;
     background: var(--bg);
   }
 
-  /* Grille accueil */
-  .grid{
-    display:grid; gap: clamp(12px,2vw,20px);
-    grid-template-columns: repeat(3, minmax(0,1fr));
-  }
-  @media (max-width: 980px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-  @media (max-width: 620px){ .grid{ grid-template-columns: 1fr; } }
-
-  .card{
-    border:2px solid var(--stroke);
-    padding: clamp(12px, 2vw, 20px);
-    background: var(--bg);
-  }
-
-  /* === Cadre + repères === */
+  /* === Cadre + repères (visuels périphériques) === */
   .page-frame{position:fixed; inset:var(--frame-gap); pointer-events:none; z-index:999;}
   .page-frame::before{content:""; position:absolute; inset:0; border:var(--border-w) solid var(--stroke); border-radius:2px}
   .tick-top{position:absolute; left:0; right:0; height:var(--frame-gap); top:calc(-1*var(--frame-gap))}
@@ -166,7 +101,19 @@
                linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;}
   .tick-right::after{content:""; position:absolute; top:50%; transform:translateY(-50%); right:0; height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);}
 
-  /* Logo bas-droite (logo0) */
+  /* === Logo bas-droite (protégé) === */
+  img{
+    -webkit-user-drag:none;
+    user-select:none;
+    pointer-events:none;
+  }
+  img[data-allow]{ pointer-events:auto; }
+  .no-save{
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-drag:none;
+    -webkit-touch-callout:none;
+  }
   .frame-logo{
     position:fixed;
     right:var(--frame-gap);
@@ -176,7 +123,7 @@
     z-index:1000;
   }
 
-  /* Boutons dans la marge haute */
+  /* === Boutons de contrôle (haut) === */
   .controls{
     position: fixed; top: 0; left: 0; right: 0;
     height: var(--frame-gap);
@@ -196,6 +143,14 @@
   .btn-back  { right: calc(50% + var(--btn-gap)); }
   .btn-home  { left:  calc(50% + var(--btn-gap)); }
   .btn-theme { right: var(--frame-gap); }
+
+  /* === Bridge thème : utilise les variables globales (style.css) === */
+  body,
+  .viewport,
+  .container {
+    background: var(--bg-color);
+    color: var(--text-color);
+  }
   </style>
 </head>
 <body>
@@ -207,7 +162,7 @@
     <button class="btn-theme" type="button" onclick="toggleTheme()" aria-label="Changer de thème">Thème</button>
   </div>
 
-  <!-- Cadre + repères (au-dessus du contenu) -->
+  <!-- Cadre + repères -->
   <div class="page-frame" aria-hidden="true">
     <div class="tick-top"></div>
     <div class="tick-bottom"></div>
@@ -220,7 +175,7 @@
        src="{{ '/assets/logo0.webp' | url }}" alt="TOLExperience"
        draggable="false" oncontextmenu="return false">
 
-  <!-- ⬇ Zone scrollable interne au cadre -->
+  <!-- Zone scrollable interne au cadre -->
   <div class="viewport">
     <main class="container">
       {{ content | safe }}
@@ -228,14 +183,48 @@
   </div>
 
   <script>
-    function toggleTheme(){
-      document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    // Applique un éventuel forçage stocké (light/dark) ou laisse l'OS décider s'il n'y en a pas.
+    function applyStoredTheme() {
+      const stored = localStorage.getItem('theme');
+      if (stored === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else if (stored === 'light') {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.remove('dark', 'light'); // suit prefers-color-scheme
+      }
     }
-    (function(){ if(localStorage.getItem('theme') === 'dark'){ document.documentElement.classList.add('dark'); }})();
+
+    // Bascule et mémorise : si aucun forçage, inverse la préférence système.
+    function toggleTheme(){
+      const root = document.documentElement;
+      if (root.classList.contains('dark')) {
+        root.classList.remove('dark');
+        root.classList.add('light');
+        localStorage.setItem('theme', 'light');
+      } else if (root.classList.contains('light')) {
+        root.classList.remove('light');
+        root.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          root.classList.add('light');
+          localStorage.setItem('theme', 'light');
+        } else {
+          root.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+        }
+      }
+    }
+
+    // Appliquer au chargement
+    applyStoredTheme();
+
     function goBack(){ if (history.length > 1) history.back(); else location.href = '/'; }
 
-    /* Bloque clic droit + drag sur .no-save et sur <img> non autorisées */
+    /* Protection clic droit + drag sur .no-save et <img> non autorisées */
     document.addEventListener('contextmenu', (e) => {
       const el = e.target.closest('img, .no-save');
       if (el && !el.matches('[data-allow]')) e.preventDefault();
@@ -247,4 +236,3 @@
   </script>
 </body>
 </html>
-
