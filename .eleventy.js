@@ -2,20 +2,14 @@
 const fs = require("fs");
 
 module.exports = function (eleventyConfig) {
-  // Ne pas s'appuyer sur .gitignore pour exclure des fichiers statiques
-  eleventyConfig.setUseGitIgnore(false);
-
-  // 🔒 Copie robuste de tout /src/assets vers /_site/assets
+  // Copie robuste de tous les assets (dont /assets/icons/*.svg)
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+  eleventyConfig.addPassthroughCopy("src/assets/icons");
 
-  // 🔧 Et on force explicitement la copie des .svg (au cas où une autre règle les bloque)
-  eleventyConfig.addPassthroughCopy({ "src/assets/**/*.svg": "assets" });
-  eleventyConfig.addPassthroughCopy({ "src/assets/icons": "assets/icons" });
-
-  // Regarde les changements dans /assets
+  // Surveille les assets en dev
   eleventyConfig.addWatchTarget("src/assets/");
 
-  // (Optionnel) Shortcode pour inline un SVG depuis /src (fallback zéro-404)
+  // Shortcode pratique pour inline un SVG (optionnel)
   eleventyConfig.addNunjucksShortcode("inlineSvg", (relPathFromSrc) => {
     const full = `src/${relPathFromSrc}`;
     return fs.existsSync(full) ? fs.readFileSync(full, "utf8") : "";
@@ -26,6 +20,7 @@ module.exports = function (eleventyConfig) {
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
     templateFormats: ["njk", "md"],
+    // En prod GitHub Pages, définis PREFIX="/tolexperience-staging/" dans le workflow si besoin
     pathPrefix: process.env.PREFIX || "/"
   };
 };
