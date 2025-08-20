@@ -1,20 +1,50 @@
 ---
-title: "Cours Industrie — TOLExperience (staging)"
+title: "Industrie / Pro — TOLExperience (staging)"
 layout: "layouts/base.njk"
 ---
 
 <h1 class="tol-title">Industrie / Pro</h1>
+<p class="tol-text">Cours techniques, études de cas et documents PDF.</p>
 
-<section class="grid">
-  {% for page in collections.industrie | reverse %}
-  <article class="card">
-    <h3 class="tol-title">
-      <a href="{{ page.url }}">{{ page.data.title }}</a>
-    </h3>
-    {% if page.data.intro %}
-      <p class="tol-text">{{ page.data.intro }}</p>
-    {% endif %}
-    <p class="tol-text"><a href="{{ page.url }}">Ouvrir →</a></p>
-  </article>
-  {% endfor %}
+<section class="grid grid--home">
+  <!-- Guindeau -->
+  <div class="card"><div class="card-body">
+      <h3 class="tol-title">Guindeau</h3>
+      <p class="tol-text">Aperçu en ligne + téléchargement du PDF.</p>
+      <a href="{{ '/cours/industrie/guindeau/' | url }}" class="btn btn--primary">Ouvrir →</a></div>
+  </div>
+
+  <!-- Matériaux -->
+  <div class="card"><div class="card-body">
+      <h3 class="tol-title">Matériaux</h3>
+      <p class="tol-text">Aperçu en ligne + téléchargement du PDF.</p>
+      <a href="{{ '/cours/industrie/materiaux/' | url }}" class="btn btn--primary">Ouvrir →</a></div>
+  </div>
+
+  <!-- Retour vers la page Cours -->
+  <div class="card"><div class="card-body">
+      <h3 class="tol-title">Retour</h3>
+      <p class="tol-text">Revenir à la sélection des cours.</p>
+      <a href="{{ '/cours/' | url }}" class="btn btn--primary">Retour cours</a></div>
+  </div>
 </section>
+
+<style>
+/* Patch local pour l’affichage de CETTE page */
+.viewport { z-index: 1200 !important; }
+
+section.grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--gap, 16px);
+}
+
+.card { position: relative; }
+.card::before { z-index: 0; }
+.card-body {
+  position: relative; z-index: 1;
+  padding: 1.5rem;
+  display: flex; flex-direction: column; gap: .6rem;
+}
+
+.container { color: var(--text-color); }
+</style>

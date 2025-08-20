@@ -5,6 +5,8 @@ tags: ["industrie"]
 intro: "Aperçu en ligne + téléchargement."
 ---
 
+<h1 class="tol-btitle">Guindeau</h1>
+
 <div class="pdf-wrapper">
   <iframe
     class="pdf-embed"
@@ -23,3 +25,33 @@ intro: "Aperçu en ligne + téléchargement."
     <a href="{{ '/assets/docs/guindeau.pdf' | url }}">ouvrir le PDF</a>.
   </p>
 </noscript>
+
+<style>
+/* Patch local pour s’assurer que le contenu est bien visible
+   au-dessus des éléments du cadre et que l’iframe remplit la zone */
+.viewport { z-index: 1200 !important; }
+
+.pdf-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  height: 70vh;              /* garde la même hauteur que ton CSS global */
+  border: 1px solid var(--gray-500);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-color);
+}
+
+.pdf-embed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Option : petit espace au-dessus/bas si besoin */
+h1.tol-btitle { margin-top: 0; }
+.pdf-actions { margin-top: 10px; }
+</style>

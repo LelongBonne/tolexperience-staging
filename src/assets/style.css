@@ -1,49 +1,61 @@
 /* ===============================================
    TOLExperience — styles globaux (palette officielle)
+   Version : 2025-08-19 (stable, hero sans image, cartes light/dark)
    =============================================== */
 
 /* ---------- Variables (couleurs & mesures) ---------- */
 :root{
-  /* Couleurs marque (officielles) */
-  --brand-red:  #a63d2f;  /* rouge */
-  --brand-blue: #005e83;  /* bleu */
+  --brand-red:  #a63d2f;
+  --brand-blue: #005e83;
+  --gray-dark:  #383e42;
+  --gray-light: #c8c8c7;
 
-  /* Palette officielle */
-  --gray-dark:  #383e42;  /* gris foncé */
-  --gray-light: #c8c8c7;  /* gris clair */
-  --white:      #f8f8f8;  /* blanc */
-  --black:      #111111;  /* noir */
+  --white:      #f8f8f8;
+  --black:      #111111;
 
-  /* Alias utilisés dans le CSS global */
   --bg-color:   var(--white);
   --text-color: var(--black);
 
-  /* Gris utilitaires (mappés sur la palette officielle) */
   --gray-300: var(--gray-light);
   --gray-500: var(--gray-dark);
-  --gray-700: var(--black); /* hover scrollbars */
+  --gray-700: var(--black);
 
-  /* Layout */
+  --page-top:   color-mix(in oklab, var(--white) 96%, var(--black) 4%);
+  --page-mid:   color-mix(in oklab, var(--white) 92%, var(--black) 8%);
+  --page-bot:   color-mix(in oklab, var(--white) 88%, var(--black) 12%);
+
+  --surface-1:  color-mix(in oklab, var(--white) 94%, var(--black) 6%);
+  --surface-2:  color-mix(in oklab, var(--white) 90%, var(--black) 10%);
+
+  --shadow-sm:  0 4px 14px rgba(0,0,0,.8);
+  --shadow-md:  0 10px 26px rgba(0,0,0,.2);
+
   --section-max-w: 1200px;
   --gap: 16px;
 
-  /* Cards */
-  --card-h: 160px;   /* hauteur minimale par défaut */
-  --card-min: 360px; /* largeur mini confortable */
+  --card-h: 160px;
+  --card-min: 360px;
 }
 
-/* Mode sombre : on inverse fond/texte et on ajuste les gris */
+/* Mode sombre */
 @media (prefers-color-scheme: dark) {
   :root{
     --bg-color:   var(--black);
     --text-color: var(--white);
-    --gray-300: var(--gray-dark);  /* track plus sombre */
-    --gray-500: var(--gray-light); /* thumb plus clair */
+    --gray-300: var(--gray-dark);
+    --gray-500: var(--gray-light);
     --gray-700: var(--white);
+
+    --page-top:  color-mix(in oklab, var(--black) 92%, var(--white) 8%);
+    --page-mid:  color-mix(in oklab, var(--black) 88%, var(--white) 12%);
+    --page-bot:  color-mix(in oklab, var(--black) 84%, var(--white) 16%);
+
+    --surface-1: color-mix(in oklab, var(--black) 88%, var(--white) 12%);
+    --surface-2: color-mix(in oklab, var(--black) 84%, var(--white) 16%);
   }
 }
 
-/* ---------- Polices (chargées globalement) ---------- */
+/* ---------- Polices ---------- */
 @font-face{
   font-family:"TOLArial3";
   src:url("/assets/fonts/TOL-Arial3Gras-SVG.otf") format("opentype");
@@ -65,7 +77,7 @@
   font-weight:400; font-style:normal; font-display:swap;
 }
 
-/* ---------- Reset léger & base ---------- */
+/* ---------- Reset & base ---------- */
 *,
 *::before,
 *::after { box-sizing: border-box; }
@@ -73,18 +85,14 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   color: var(--text-color);
-  background: var(--bg-color);
   font-family:"TOLArial4", Arial, Helvetica, sans-serif;
   font-size:16px; line-height:1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-/* Liens */
 a { color: var(--brand-blue); text-decoration: underline; }
 
-/* ---------- Titres & textes ---------- */
-/* Titres par défaut */
+/* ---------- Titres ---------- */
 h1, h2, h3 {
   font-family: "TOLArial2", system-ui, Arial, sans-serif;
   font-weight: 700;
@@ -94,206 +102,150 @@ h1, h2, h3 {
 h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.2; }
 h2 { font-size: clamp(1.4rem, 3.2vw, 1.9rem); line-height: 1.3; }
 h3 { font-size: clamp(1.2rem, 2.6vw, 1.5rem); line-height: 1.4; }
-
-/* Titre “classique” : TOLArial2, gris foncé */
-.tol-title {
-  font-family: "TOLArial2", system-ui, Arial, sans-serif;
-  color: var(--gray-500); /* #383e42 */
-  font-weight: 400;
-  margin: 0 0 .3rem 0;
-}
-
-/* Titre branding : TOLArial3 bleu, L majuscule rouge via <span class="red-L"> */
-.tol-btitle {
-  font-family: "TOLArial3", system-ui, Arial, sans-serif;
-  font-weight: 700;
-  color: var(--brand-blue);
-  margin: 0 0 .3rem 0;
-}
+.tol-title { font-family: "TOLArial2"; color: var(--gray-500); font-weight: 400; }
+.tol-btitle { font-family: "TOLArial3"; font-weight: 700; color: var(--brand-blue); }
 .tol-btitle .red-L { color: var(--brand-red); }
+.tol-text { font-family: "TOLArial4"; line-height: 1.5; }
+.tol-note { font-family: "TOL-RV1"; font-weight: normal; }
 
-/* Corps de texte */
-.tol-text {
-  font-family: "TOLArial4", system-ui, Arial, sans-serif;
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* Slogan manuscrit, non gras */
-.tol-note {
-  font-family: "TOL-RV1", "TOL-RV1", ui-rounded, system-ui, sans-serif;
-  font-weight: normal;
-}
-
-/* ---------- Sections & conteneurs ---------- */
+/* ---------- Sections ---------- */
 .section { max-width: var(--section-max-w); margin: 0 auto; padding: clamp(12px, 2.2vw, 24px); }
 .section--full { max-width: 100%; }
 
-/* Logo d'accueil */
-.home-hero{
-  display:flex; justify-content:center; margin: 0 0 clamp(12px,2.4vw,24px);
+/* ---------- HERO : sans image derrière le logo ---------- */
+.hero-banner {
+  text-align: center;
+  margin-bottom: clamp(16px,3vw,32px);
+  background: none; /* pas d'image derrière le logo */
+  border-radius: 12px;
+  overflow: hidden;
+  padding: clamp(12px,2vw,24px) 0 clamp(16px,3vw,32px);
 }
-.home-hero img{
-  height: clamp(64px, 12vw, 150px); width:auto; object-fit:contain;
-}
+.hero-stack { display: inline-block; text-align: center; }
+.logo { display:block; height: clamp(72px, 12vw, 150px); width:auto; margin:0 auto 8px; }
+.slogans { margin:0 auto; max-width: var(--logo-width, 600px); white-space: nowrap; }
+.slogan-left,.slogan-right { margin:4px 0; line-height:1.2; font-family:"TOL-RV1"; font-size: var(--slogan-size,24px); color: #383e42; }
+.slogan-left{text-align:left;} .slogan-right{text-align:right;}
 
 /* ---------- Grille ---------- */
 .grid { display: grid; gap: var(--gap); }
 .grid--home{ grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min)), 1fr)); }
 
-/* ---------- Cartes (hauteur adaptative) ---------- */
+/* ---------- Cartes ---------- */
 .card{
-  border: 1px solid var(--gray-300);
-  border-radius: 10px;
-  background: transparent; /* passer à var(--white) si tu veux un fond clair */
-  padding: 0; /* padding porté par .card-body */
+  position: relative;
+  border: 2px solid var(--gray-300);
+  border-radius: 0px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: var(--surface-1);
+  transition: box-shadow .15s ease;
+  color: var(--text-color);
 }
-
+.card::before {
+  content:"";
+  position:absolute; inset:0;
+  background: url("/assets/background-l.jpg") center/cover no-repeat; /* version claire */
+  z-index: 0;
+  pointer-events:none;
+}
+html.dark .card::before {
+  background: url("/assets/background-d.jpg") center/cover no-repeat; /* version sombre */
+}
 .card-body {
-  padding: 1.5rem; /* tu peux augmenter l'espace entre le texte et la carte*/
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: .6rem; /* tu peux aussi augmenter l’écart entre lignes */
-  min-height: 0;
+  gap: .6rem;
+  flex: 1; /* permet de prendre toute la hauteur dispo */
+}
+.card:hover{ box-shadow: var(--shadow-md); }
+
+.grid--home .card{ min-height: var(--card-h); height:auto; display:flex; flex-direction:column; }
+.grid--home .card h3{ margin:0 0 .3rem 0; color: var(--gray-500); }
+.grid--home .card p{ margin:0; line-height:1.3; overflow-wrap:anywhere; color: var(--gray-500); }
+
+/* Logo carré optionnel */
+.card h3 .logo-mark{
+  display:inline-block; width:1.2em; height:1.2em;
+  margin-right:.45rem; border-radius:4px;
+  background: linear-gradient(180deg,var(--gray-light),color-mix(in oklab,var(--gray-light)70%,var(--black)30%));
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
 }
 
-.grid--home .card{
-  min-height: var(--card-h);
-  height: auto; /* s’adapte au contenu si plus petit */
-  display: flex;
-  flex-direction: column;
+/* ---------- Boutons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:.45rem 1rem; border-radius:999px;
+  border:1px solid transparent; text-decoration:none; cursor:pointer;
+  font-family:"TOLArial2"; font-weight:700; font-size:0.9rem;
+  transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
 }
-.grid--home .card h3{ margin: 0 0 .3rem 0; }
-.grid--home .card p{
-  margin: 0;
-  line-height: 1.3;
-  overflow-wrap: anywhere; /* évite débordements sur petits écrans */
+.btn:active{ transform: translateY(1px); }
+.btn--primary{
+  background: var(--brand-blue);
+  color: var(--gray-light);
+  box-shadow: 0 3px 8px rgba(0,0,0,.8);
+}
+.btn--primary:hover{ filter:brightness(1.05); transform:translateY(-1px); }
+
+/* Boutons dans les cartes : largeur max + centrage + bas */
+.grid--home .card .btn{
+  width: 100%;
+  max-width: 120px;      /* largeur maxi */
+  margin-top: auto;      /* pousse le bouton en bas */
+  margin-left: auto;
+  margin-right: auto;    /* centre horizontalement */
+  align-self: center;
 }
 
-/* ---------- Responsive (1 colonne) ---------- */
+/* ---------- Responsive ---------- */
 @media (max-width: 760px){
   .grid--home { grid-template-columns: 1fr; }
   :root{ --card-h: 140px; }
-  .grid--home .card h3 {
-    font-size: clamp(1rem, 3.8vw, 1.1rem);
-    line-height: 1.15;
-    text-wrap: balance;
-  }
-  .grid--home .card p {
-    font-size: clamp(0.9rem, 3.2vw, 1rem);
-    line-height: 1.25;
-  }
-  .card-body { gap: .5rem; }
+  .grid--home .card h3 { font-size:clamp(1rem,3.8vw,1.1rem); line-height:1.15; }
+  .grid--home .card p { font-size:clamp(0.9rem,3.2vw,1rem); line-height:1.25; }
+  .card-body { gap:.5rem; }
 }
 
-/* ---------- Ascenseurs (scrollbars) ---------- */
-/* Objectif :
-   - la piste (track) = même couleur que le fond d'écran
-   - le pouce (thumb) + boutons = couleur opposée (contraste)
-*/
+/* ---------- Scrollbars ---------- */
+::-webkit-scrollbar{ width:12px; height:12px;}
+::-webkit-scrollbar-track{ background:var(--bg-color);}
+::-webkit-scrollbar-thumb{
+  background-color:var(--text-color); border-radius:6px;
+  border:3px solid var(--bg-color);
+}
+::-webkit-scrollbar-thumb:hover{
+  background-color:color-mix(in oklab,var(--text-color)85%,var(--bg-color)15%);
+}
+::-webkit-scrollbar-button{ background:var(--text-color); border:2px solid var(--bg-color);}
+*{ scrollbar-width:thin; scrollbar-color:var(--text-color) var(--bg-color); }
 
-/* Chrome, Edge, Safari, Opera (WebKit) */
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+/* ---------- Thème manuel ---------- */
+html.dark{
+  --bg-color:var(--black); --text-color:var(--white);
+  --gray-300:var(--gray-dark); --gray-500:var(--gray-light); --gray-700:var(--white);
+}
+html.light{
+  --bg-color:var(--white); --text-color:var(--black);
+  --gray-300:var(--gray-light); --gray-500:var(--gray-dark); --gray-700:var(--black);
 }
 
-/* Piste = fond de page */
-::-webkit-scrollbar-track {
-  background: var(--bg-color);
-}
+/* ---------- Vidéos ---------- */
+.video-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:12px;}
+.video-card{ margin:0;}
+.video-frame{ position:relative; padding-top:56.25%; background:var(--gray-300); border:1px solid var(--gray-500); border-radius:8px; overflow:hidden;}
+.video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
 
-/* Pouce = couleur de texte (opposé du fond) */
-::-webkit-scrollbar-thumb {
-  background-color: var(--text-color);
-  border-radius: 6px;
-  /* “padding” visuel du pouce : bord de la couleur du fond */
-  border: 3px solid var(--bg-color);
-}
-
-/* Survol : léger adoucissement (si color-mix non supporté, tombe sur text-color) */
-::-webkit-scrollbar-thumb:hover {
-  background-color: color-mix(in oklab, var(--text-color) 85%, var(--bg-color) 15%);
-}
-
-/* Boutons (flèches) — selon navigateur ils peuvent ne pas s'afficher */
-::-webkit-scrollbar-button {
-  background: var(--text-color);
-  border: 2px solid var(--bg-color);
-}
-
-/* Firefox */
-* {
-  /* thumb track */
-  scrollbar-width: thin;
-  scrollbar-color: var(--text-color) var(--bg-color);
-}
-
-/* === Vidéos === */
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  margin-top: 12px;
-}
-.video-card {
-  margin: 0;
-}
-
-/* === Vidéo === */
-.video-frame {
-  position: relative;
-  padding-top: 56.25%; /* ratio 16:9 */
-  background: var(--gray-300);        /* foncé en clair, clair en sombre */
-  border: 1px solid var(--gray-500);  /* clair en clair, foncé en sombre */
-  border-radius: 8px;
-  overflow: hidden;
-}
-.video-frame iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-/* === PDF viewer embed === */
-.pdf-wrapper{
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  height: 70vh;
-  border: 1px solid var(--gray-500);  /* suit le thème automatiquement */
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.pdf-wrapper .pdf-embed{
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-.pdf-actions{ margin-top: 10px; }
+/* ---------- PDF viewer ---------- */
+.pdf-wrapper{ width:100%; max-width:100%; margin:0 auto; height:70vh; border:1px solid var(--gray-500); border-radius:8px; overflow:hidden;}
+.pdf-wrapper .pdf-embed{ width:100%; height:100%; border:0;}
+.pdf-actions{ margin-top:10px;}
 
 
-/* === Override thème manuel via classe .dark (bouton Thème) === */
-html.dark {
-  --bg-color:   var(--black);
-  --text-color: var(--white);
-
-  /* scrollbars & traits */
-  --gray-300: var(--gray-dark);   /* piste plus sombre */
-  --gray-500: var(--gray-light);  /* pouce plus clair pour le contraste */
-  --gray-700: var(--white);
-}
-
-/* === Override thème manuel via classe .light (bouton Thème) === */
-/* Permet de forcer le clair même si l’OS est en sombre */
-html.light {
-  --bg-color:   var(--white);
-  --text-color: var(--black);
-
-  --gray-300: var(--gray-light);
-  --gray-500: var(--gray-dark);
-  --gray-700: var(--black);
-}
+/* --- Uniformisation cartes (aligner les boutons en bas, tous contextes) --- */
+.card-body { display:flex; flex-direction:column; } /* sécurité si absent */
+.grid--home .card .btn { align-self:center; margin-top:auto; }
+.card-body > p:has(> .btn) { margin-top:auto; text-align:center; } /* filet de sécu */

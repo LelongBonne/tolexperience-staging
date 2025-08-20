@@ -5,6 +5,8 @@ tags: ["industrie"]
 intro: "Aperçu en ligne + téléchargement."
 ---
 
+<h1 class="tol-btitle">Matériaux</h1>
+
 <div class="pdf-wrapper">
   <iframe
     class="pdf-embed"
@@ -19,7 +21,35 @@ intro: "Aperçu en ligne + téléchargement."
 </p>
 
 <noscript>
-  <p>Le lecteur intégré nécessite JavaScript. Vous pouvez 
+  <p>Le lecteur intégré nécessite JavaScript. Vous pouvez
     <a href="{{ '/assets/docs/materiaux.pdf' | url }}">ouvrir le PDF</a>.
   </p>
 </noscript>
+
+<style>
+/* Patch local pour garantir l’affichage dans le cadre */
+.viewport { z-index: 1200 !important; }
+
+.pdf-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  height: 70vh;                         /* cohérent avec ton CSS global */
+  border: 1px solid var(--gray-500);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-color);
+}
+
+.pdf-embed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+h1.tol-btitle { margin-top: 0; }
+.pdf-actions { margin-top: 10px; }
+</style>
