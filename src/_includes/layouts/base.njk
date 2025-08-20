@@ -6,58 +6,41 @@
   <title>{{ title | default("TOLExperience") }}</title>
 
   <!-- CSS global (palette, polices, grilles, cartes, tol-*, scrollbars) -->
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="{{ '/assets/style.css' | url }}">
 
   <style>
-  /* === Variables spécifiques AU CADRE (mappées sur la palette globale) === */
   :root{
-    /* recycle les variables de /assets/style.css */
     --bg:    var(--bg-color);
     --text:  var(--text-color);
     --stroke:var(--gray-500);
-
-    /* Gabarit du cadre */
     --frame-gap: clamp(12px, 1.2vw + 8px, 1cm);
     --border-w:3px;
     --line-thin:1px;
     --line-center:2px;
-
-    /* Taquets repères */
     --tick-base:7mm;
     --tick-mid-base:9mm;
     --tick-l:     min(var(--tick-base),     var(--frame-gap));
     --tick-l-mid: min(var(--tick-mid-base), calc(var(--frame-gap) + 10px));
-
-    /* Logo fixe bas-droite */
     --logo-target: 34px;
     --logo-bottom-offset: 2px;
     --logo-clear-frame:  2px;
-
-    /* Padding intérieur de la zone scrollable */
     --content-pad: clamp(12px, 2.2vw, 28px);
-
-    /* Boutons haut */
     --btn-gap: clamp(6px, 1vw, 14px);
     --btn-font: clamp(14px, calc(var(--frame-gap)*0.90), 34px);
-
-    /* Taille visuelle de la tuile inox (ajuste si besoin) */
     --tile-size: 256px;
   }
-
   html,body{height:100%; margin:0; -webkit-text-size-adjust:100%;}
   body{
-    background:var(--bg); /* fond neutre global derrière le cadre */
+    background:var(--bg);
     color:var(--text);
     font-family:"TOLArial4", Arial, Helvetica, sans-serif;
     font-size:16px; line-height:1.55;
     min-height: 100dvh;
     padding: 0;
-    overflow: hidden; /* pas de scroll page ; le scroll se fait dans .viewport */
+    overflow: hidden;
     -webkit-touch-callout:none;
   }
   *,*::before,*::after{ box-sizing:border-box; }
-
-  /* Zone scrollable intérieure au cadre (contenu) */
   .viewport{
     position: fixed;
     top:    var(--frame-gap);
@@ -69,18 +52,8 @@
     -webkit-overflow-scrolling: touch;
     z-index: 100;
     padding: var(--content-pad);
-    /* L'arrière-plan final est défini plus bas pour éviter tout override */
   }
-
-  /* ⬇⬇⬇ élargi : pleine largeur */
-  .container{
-    max-width: 100%;
-    width: 100%;
-    margin: 0 auto;
-    background: transparent; /* ne recouvre pas l'image */
-  }
-
-  /* === Cadre + repères (visuels périphériques) === */
+  .container{ max-width: 100%; width: 100%; margin: 0 auto; background: transparent; }
   .page-frame{position:fixed; inset:var(--frame-gap); pointer-events:none; z-index:999;}
   .page-frame::before{content:""; position:absolute; inset:0; border:var(--border-w) solid var(--stroke); border-radius:2px}
   .tick-top{position:absolute; left:0; right:0; height:var(--frame-gap); top:calc(-1*var(--frame-gap))}
@@ -104,19 +77,9 @@
                linear-gradient(90deg,var(--stroke),var(--stroke)) 0 75%/100% var(--line-thin) no-repeat;}
   .tick-right::after{content:""; position:absolute; top:50%; transform:translateY(-50%); right:0; height:var(--line-center); width:var(--tick-l-mid); background:var(--stroke);}
 
-  /* === Logo bas-droite (protégé) === */
-  img{
-    -webkit-user-drag:none;
-    user-select:none;
-    pointer-events:none;
-  }
+  img{ -webkit-user-drag:none; user-select:none; pointer-events:none; }
   img[data-allow]{ pointer-events:auto; }
-  .no-save{
-    pointer-events:none;
-    user-select:none;
-    -webkit-user-drag:none;
-    -webkit-touch-callout:none;
-  }
+  .no-save{ pointer-events:none; user-select:none; -webkit-user-drag:none; -webkit-touch-callout:none; }
   .frame-logo{
     position:fixed;
     right:var(--frame-gap);
@@ -125,8 +88,6 @@
     width:auto; object-fit:contain; opacity:.95;
     z-index:1000;
   }
-
-  /* === Boutons de contrôle (haut) === */
   .controls{
     position: fixed; top: 0; left: 0; right: 0;
     height: var(--frame-gap);
@@ -147,53 +108,30 @@
   .btn-home  { left:  calc(50% + var(--btn-gap)); }
   .btn-theme { right: var(--frame-gap); }
 
-  /* === Bridge thème : NE PAS ÉCRASER l'image de .viewport === */
-  body {
-    background: var(--bg-color);
-    color: var(--text-color);
-  }
-  .container {
-    background: transparent;
-    color: inherit;
-  }
+  body { background: var(--bg-color); color: var(--text-color); }
+  .container { background: transparent; color: inherit; }
 
-  /* === Arrière-plan final de la zone intérieure : motif répété inox === */
   .viewport{
-    /* Fallback (anciens navigateurs) */
-    background-image: url("/assets/bg-metal-512.jpg");
-
-    /* Formats modernes */
+    background-image: url("{{ '/assets/bg-metal-512.jpg' | url }}");
     background-image: image-set(
-      url("/assets/bg-metal-512.webp") type("image/webp") 1x,
-      url("/assets/bg-metal-512.jpg")  type("image/jpeg") 1x
+      url("{{ '/assets/bg-metal-512.webp' | url }}") type("image/webp") 1x,
+      url("{{ '/assets/bg-metal-512.jpg' | url }}")  type("image/jpeg") 1x
     );
-
     background-repeat: repeat;
     background-position: 0 0;
-    background-size: var(--tile-size) var(--tile-size); /* ex: 320px */
-    background-color: transparent; /* au cas où */
+    background-size: var(--tile-size) var(--tile-size);
+    background-color: transparent;
   }
-
-  /* Variante sombre (optionnelle)
-  @media (prefers-color-scheme: dark){
-    .viewport{
-      background-color: rgba(0,0,0,.04);
-      background-blend-mode: multiply;
-    }
-  }
-  */
   </style>
 </head>
 <body>
 
-  <!-- Barre de contrôle -->
   <div class="controls" aria-hidden="false">
     <button class="btn-back"  type="button" onclick="goBack()"   aria-label="Retour">Retour</button>
-    <button class="btn-home"  type="button" onclick="location.href='/'" aria-label="Accueil">Accueil</button>
+    <button class="btn-home"  type="button" onclick="location.href='{{ '/' | url }}'" aria-label="Accueil">Accueil</button>
     <button class="btn-theme" type="button" onclick="toggleTheme()" aria-label="Changer de thème">Thème</button>
   </div>
 
-  <!-- Cadre + repères -->
   <div class="page-frame" aria-hidden="true">
     <div class="tick-top"></div>
     <div class="tick-bottom"></div>
@@ -201,12 +139,10 @@
     <div class="tick-right"></div>
   </div>
 
-  <!-- Logo bas-droite : protégé -->
   <img class="frame-logo no-save"
        src="{{ '/assets/logo0.webp' | url }}" alt="TOLExperience"
        draggable="false" oncontextmenu="return false">
 
-  <!-- Zone scrollable interne au cadre (avec motif inox répété) -->
   <div class="viewport">
     <main class="container">
       {{ content | safe }}
@@ -214,7 +150,6 @@
   </div>
 
   <script>
-    // Applique un éventuel forçage stocké (light/dark) ou laisse l'OS décider s'il n'y en a pas.
     function applyStoredTheme() {
       const stored = localStorage.getItem('theme');
       if (stored === 'dark') {
@@ -224,11 +159,9 @@
         document.documentElement.classList.add('light');
         document.documentElement.classList.remove('dark');
       } else {
-        document.documentElement.classList.remove('dark', 'light'); // suit prefers-color-scheme
+        document.documentElement.classList.remove('dark', 'light');
       }
     }
-
-    // Bascule et mémorise : si aucun forçage, inverse la préférence système.
     function toggleTheme(){
       const root = document.documentElement;
       if (root.classList.contains('dark')) {
@@ -249,13 +182,8 @@
         }
       }
     }
-
-    // Appliquer au chargement
     applyStoredTheme();
-
-    function goBack(){ if (history.length > 1) history.back(); else location.href = '/'; }
-
-    /* Protection clic droit + drag sur .no-save et <img> non autorisées */
+    function goBack(){ if (history.length > 1) history.back(); else location.href = '{{ '/' | url }}'; }
     document.addEventListener('contextmenu', (e) => {
       const el = e.target.closest('img, .no-save');
       if (el && !el.matches('[data-allow]')) e.preventDefault();
