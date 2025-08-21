@@ -4,7 +4,7 @@ layout: layouts/base.njk
 ---
 
 <div class="section section--full">
-  <!-- Plaque épaisse en perspective cavalière (parallélogrammes) -->
+  <!-- Plaque autour du logo avec bord droit uniquement -->
   <div class="hero-plate">
     <div class="hero-banner">
       <div class="hero-stack">
@@ -14,6 +14,8 @@ layout: layouts/base.njk
           <h3 class="tol-note slogan-right">…et prouver votre compétitivité</h3>
         </div>
       </div>
+      <!-- rectangle vertical droit -->
+      <div class="hero-side"></div>
     </div>
   </div>
 
@@ -59,76 +61,66 @@ layout: layouts/base.njk
 
 <style>
 .hero-plate{
-  --thick: 3px;
-  --alpha: 45deg;
-  --frame: #383e42;
-  --side:  #383e42;
-  position: relative;
   margin-bottom: clamp(16px,3vw,32px);
-  overflow: visible;
   filter: drop-shadow(var(--shadow-sm));
 }
+
+/* Bannière sans bordure claire */
 .hero-plate .hero-banner{
   position: relative;
   min-height: 110px;
-  border: 2px solid var(--frame);
+  border: none;                  /* pas de cadre clair */
   border-radius: 0;
   background: url("{{ '/assets/background.jpg' | url }}") center/cover no-repeat;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.35),
               inset 0 -1px 0 rgba(0,0,0,.20);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+/* Rectangle droit gris foncé */
+.hero-plate .hero-side{
+  position: absolute;
+  top: 0; right: 0;
+  width: 6px; height: 100%;
+  background: #383e42;
+  border: 2px solid #383e42; /* contour */
+  border-left: none;         /* évite double trait côté bannière */
+  box-sizing: border-box;
+}
+
+/* Contenu centré */
 .hero-plate .hero-stack{
   display: grid;
   place-items: center;
   padding: clamp(4px, 1vw, 12px);
+  flex: 1;
 }
-.hero-plate::before{
-  content: "";
-  position: absolute;
-  top: 100%; left: 0;
-  width: 100%; height: var(--thick);
-  transform-origin: top left;
-  transform: skewX(var(--alpha));
-  background: #c8c8c7;
-  border: 2px solid #383e42;
-  border-top: none;
-  box-sizing: border-box;
-  z-index: 1;
-}
-.hero-plate::after{
-  content: "";
-  position: absolute;
-  top: 0; left: 100%;
-  width: var(--thick); height: 100%;
-  transform-origin: top left;
-  transform: skewY(var(--alpha));
-  background: var(--side);
-  border: 2px solid #383e42;
-  border-left: none;
-  box-sizing: border-box;
-  z-index: 2;
-}
-.slogans { max-width: var(--logo-width, 600px); }
-.slogan-left, .slogan-right { color:#383e42; text-shadow:none; }
 
+/* Slogans */
+.slogans { max-width: var(--logo-width, 600px); }
+.slogan-left, .slogan-right { color:#383e42; }
+
+/* Logo — plus petit */
 #hero-logo.logo{
-  width: clamp(220px, 40vw, 520px);
+  width: clamp(160px, 28vw, 360px);
   height: auto !important;
   object-fit: contain;
   margin: 0 auto 6px;
 }
 
+/* Icônes cartes */
 .card h3{ display:flex; align-items:center; gap:.75rem; margin-top:0; }
 .card-icon{
-  width: 48px; height: 48px; flex: 0 0 48px;
+  width: 30px; height: 30px; flex: 0 0 30px;
   display: inline-block;
   color:#1b4f72;
   filter: drop-shadow(0 2px 1px rgba(0,0,0,.2));
 }
 
 @media (max-width: 760px){
-  .hero-plate{ --thick: 3px; }
-  #hero-logo.logo{ width: clamp(180px, 55vw, 420px); }
+  #hero-logo.logo{ width: clamp(140px, 45vw, 260px); }
 }
 </style>
 
